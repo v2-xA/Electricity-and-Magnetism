@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity and Magnetism</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts for Arabic & Monospace -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pcb: '#0b1912',
+                        pcbDark: '#050c09',
+                        pcbBoard: '#12261c',
+                        copper: '#d97706',
+                        copperGlow: '#f59e0b',
+                        neonBlue: '#38bdf8',
+                        neonGreen: '#22c55e',
+                        neonRed: '#ef4444',
+                        neonYellow: '#eab308'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'Cairo', 'Tajawal', 'sans-serif'],
+                        arabic: ['Tajawal', 'Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050c09;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', 'Tajawal', sans-serif;
+            transition: direction 0.3s ease, font-family 0.3s ease;
+        }
+
+        /* PCB Grid Background Pattern */
+        .pcb-grid {
+            background-color: #0b1912;
+            background-image: 
+                radial-gradient(#1e3a2b 1px, transparent 1px), 
+                radial-gradient(#1e3a2b 1px, #0b1912 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        /* Skeuomorphic Glass & Metallic Panels */
+        .workbench-panel {
+            background: linear-gradient(145deg, #142c20, #0d1e16);
+            border: 1px solid #234e38;
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 10px 25px -5px rgba(0, 0, 0, 0.7);
+            border-radius: 0.75rem;
+        }
+
+        .screen-inset {
+            background-color: #06120c;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 2px rgba(34, 197, 94, 0.2);
+            border: 1px solid #1c3d2c;
+        }
+
+        /* LED Indicator Lights */
+        .led-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+        }
+        .led-green { background-color: #22c55e; box-shadow: 0 0 10px #22c55e, inset 0 1px 2px #fff; }
+        .led-red { background-color: #ef4444; box-shadow: 0 0 10px #ef4444, inset 0 1px 2px #fff; }
+        .led-orange { background-color: #f59e0b; box-shadow: 0 0 10px #f59e0b, inset 0 1px 2px #fff; }
+        .led-off { background-color: #1e3a2a; box-shadow: inset 0 1px 3px rgba(0,0,0,0.8); }
+
+        /* Current Flow Animation */
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -40;
+            }
+        }
+        .electron-flow {
+            stroke-dasharray: 8, 8;
+            animation: dash 1s linear infinite;
+        }
+
+        /* Slide Transition Animations */
+        .slide-enter {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+        .slide-active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            accent-color: #22c55e;
+        }
+
+        /* Glowing text effects */
+        .glow-green { text-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track { background: #08140e; }
+        ::-webkit-scrollbar-thumb { background: #1e3d2c; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+
+        /* RTL Adjustments */
+        [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-x-reverse: 1;
+        }
+        [dir="rtl"] .font-mono {
+            font-family: 'JetBrains Mono', 'Cairo', monospace;
+        }
+    </style>
+</head>
+<body class="pcb-grid min-h-screen flex flex-col justify-between select-none text-slate-200">
+
+    <!-- Top Workbench Header Control Bar -->
+    <header class="bg-pcbDark/90 border-b border-green-900/40 px-4 py-3 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <!-- Title & Lab Specs -->
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <div class="p-2 bg-green-950 border border-green-600/40 rounded-lg text-green-400">
+                    <i data-lucide="zap" class="w-6 h-6 animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold font-mono tracking-wider text-green-400 flex items-center gap-2">
+                        <span data-i18n="lab_title">PHYSICS LAB</span>
+                        <span class="text-xs bg-green-900/60 text-green-300 px-2 py-0.5 rounded border border-green-600/30" data-i18n="lab_version">Electricity and Magnetism</span>
+                    </h1>
+                    <p class="text-xs text-slate-400" data-i18n="lab_subtitle">Interactive Circuit & Electronics Module</p>
+                </div>
+            </div>
+
+            <!-- Slide Navigation Indicators (Step Dots) -->
+            <div class="hidden lg:flex items-center space-x-2 rtl:space-x-reverse bg-black/40 p-1.5 rounded-full border border-green-900/40">
+                <button onclick="goToSlide(0)" id="nav-btn-0" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_1">1. Circuits</span>
+                </button>
+                <button onclick="goToSlide(1)" id="nav-btn-1" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_2">2. Quantities & AC/DC</span>
+                </button>
+                <button onclick="goToSlide(2)" id="nav-btn-2" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_3">3. Ohm's Law</span>
+                </button>
+                <button onclick="goToSlide(3)" id="nav-btn-3" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_4">4. Components</span>
+                </button>
+                <button onclick="goToSlide(4)" id="nav-btn-4" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_5">5. Instruments</span>
+                </button>
+            </div>
+
+            <!-- Action Controls & Language Switcher -->
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <button onclick="toggleLanguage()" id="lang-btn" class="px-3 py-1.5 bg-green-900/60 hover:bg-green-800 text-green-300 font-mono text-xs rounded border border-green-600/50 flex items-center gap-1.5 transition shadow-sm font-bold">
+                    <i data-lucide="languages" class="w-4 h-4 text-green-400"></i>
+                    <span id="lang-btn-text">English</span>
+                </button>
+
+                <button onclick="toggleAudioFeedback()" id="audio-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-mono rounded border border-slate-600 flex items-center gap-1.5 transition">
+                    <i data-lucide="volume-2" class="w-4 h-4 text-green-400"></i> <span data-i18n="audio_fx">Audio FX</span>
+                </button>
+                <button onclick="toggleFullscreen()" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-xs rounded border border-slate-600 transition" title="Toggle Fullscreen">
+                    <i data-lucide="maximize" class="w-4 h-4 text-slate-300"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Presentation Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full relative">
+
+        <!-- SECTION 1: Types of Electric Circuits -->
+        <section id="slide-0" class="slide-active workbench-panel p-6 shadow-2xl relative overflow-hidden">
+            <div class="flex justify-between items-center mb-6 border-b border-green-900/50 pb-3">
+                <div>
+                    <span class="text-xs font-mono text-green-400 uppercase tracking-widest" data-i18n="sec1_tag">Section 01 / Basic Circuit Theory</span>
+                    <h2 class="text-2xl font-bold font-mono text-white flex items-center gap-2">
+                        <i data-lucide="cpu" class="text-green-400"></i> <span data-i18n="sec1_title">Types of Electric Circuits</span>
+                    </h2>
+                </div>
+                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec1_badge">
+                    3 Core States
+                </span>
+            </div>
+
+            <p class="text-slate-300 mb-6 text-sm md:text-base leading-relaxed" data-i18n="sec1_desc">
+                An electric circuit is a closed loop or path through which electric current flows. Depending on the continuity and load resistance of the path, circuits operate in three fundamental configurations:
+            </p>
+
+            <!-- Circuit Type Selector Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <!-- 1. Closed Circuit Card -->
+                <div onclick="selectCircuitType('closed')" id="card-closed" class="cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/20 hover:bg-green-900/30 transition-all rounded-xl relative group">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-green-400 text-lg flex items-center gap-2">
+                            <span id="led-closed" class="led-indicator led-green"></span> <span data-i18n="card_closed_title">Closed Circuit</span>
+                        </h3>
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_closed_desc">
+                        A complete unbroken loop allows continuous electric current to flow from the voltage source, through the load (lamp), and back.
+                    </p>
+                    <div class="text-xs font-mono text-green-300 bg-green-950/80 p-2 rounded border border-green-800/40">
+                        <span data-i18n="status_label">Status:</span> <span class="font-bold text-green-400" data-i18n="status_closed">Current Flowing (Lamp ON)</span>
+                    </div>
+                </div>
+
+                <!-- 2. Open Circuit Card -->
+                <div onclick="selectCircuitType('open')" id="card-open" class="cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-amber-400 text-lg flex items-center gap-2">
+                            <span id="led-open" class="led-indicator led-off"></span> <span data-i18n="card_open_title">Open Circuit</span>
+                        </h3>
+                        <i data-lucide="scissors" class="w-5 h-5 text-amber-400"></i>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_open_desc">
+                        A break in the conductive path (like an open switch) prevents electrons from flowing. Infinite air resistance blocks current.
+                    </p>
+                    <div class="text-xs font-mono text-amber-300 bg-amber-950/40 p-2 rounded border border-amber-800/40">
+                        <span data-i18n="status_label">Status:</span> <span class="font-bold text-amber-400" data-i18n="status_open">Zero Current (Lamp OFF)</span>
+                    </div>
+                </div>
+
+                <!-- 3. Short Circuit Card -->
+                <div onclick="selectCircuitType('short')" id="card-short" class="cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-rose-400 text-lg flex items-center gap-2">
+                            <span id="led-short" class="led-indicator led-off"></span> <span data-i18n="card_short_title">Short Circuit</span>
+                        </h3>
+                        <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-400 animate-bounce"></i>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_short_desc">
+                        A low-resistance bypass path directly connects power terminals. Uncontrolled excessive current creates dangerous heat & spark risks.
+                    </p>
+                    <div class="text-xs font-mono text-rose-300 bg-rose-950/40 p-2 rounded border border-rose-800/40">
+                        <span data-i18n="status_label">Status:</span> <span class="font-bold text-rose-400" data-i18n="status_short">Overcurrent Hazard!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Schematic Simulation Viewer -->
+            <div class="screen-inset p-6 rounded-xl relative">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                        <span class="text-xs font-mono text-slate-400 ml-2 rtl:mr-2" data-i18n="schematic_title">Schematic Oscilloscope View</span>
+                    </div>
+                    <div class="text-xs font-mono text-green-400" id="circuit-summary-tag" data-i18n="mode_closed">
+                        Active Mode: Closed Circuit Continuous Flow
+                    </div>
+                </div>
+
+                <!-- SVG Circuit Interactive Schematic -->
+                <div class="w-full flex justify-center py-4 overflow-x-auto">
+                    <svg id="circuit-svg" viewBox="0 0 600 300" class="w-full max-w-xl h-64 bg-slate-950/70 rounded-lg border border-green-900/40 shadow-inner">
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#102a1d" stroke-width="0.5"/>
+                        </pattern>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+
+                        <!-- Circuit Wire Path -->
+                        <path id="wire-path" d="M 120 150 L 120 70 L 480 70 L 480 150 L 480 230 L 120 230 Z" 
+                              fill="none" stroke="#1e4d35" stroke-width="6" stroke-linejoin="round"/>
+                        
+                        <!-- Animated Electron Stream -->
+                        <path id="electron-stream" d="M 120 150 L 120 70 L 480 70 L 480 150 L 480 230 L 120 230 Z" 
+                              fill="none" stroke="#22c55e" stroke-width="3" class="electron-flow"/>
+
+                        <!-- DC Voltage Source -->
+                        <g transform="translate(120, 150)">
+                            <circle r="22" fill="#0b1912" stroke="#22c55e" stroke-width="2"/>
+                            <line x1="-10" y1="-8" x2="10" y2="-8" stroke="#ef4444" stroke-width="3"/>
+                            <line x1="0" y1="-13" x2="0" y2="-3" stroke="#ef4444" stroke-width="3"/>
+                            <line x1="-6" y1="8" x2="6" y2="8" stroke="#38bdf8" stroke-width="3"/>
+                            <text id="svg-text-dc" x="-38" y="4" fill="#22c55e" font-family="monospace" font-size="12" font-weight="bold">DC 12V</text>
+                        </g>
+
+                        <!-- Switch Element -->
+                        <g transform="translate(300, 70)">
+                            <circle cx="-30" cy="0" r="5" fill="#22c55e"/>
+                            <circle cx="30" cy="0" r="5" fill="#22c55e"/>
+                            <line id="switch-arm" x1="-30" y1="0" x2="28" y2="0" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+                            <text id="svg-text-switch" x="-15" y="-12" fill="#cbd5e1" font-family="monospace" font-size="11" data-i18n="svg_switch">Switch</text>
+                        </g>
+
+                        <!-- Load Right Side -->
+                        <g transform="translate(480, 150)">
+                            <circle id="bulb-glow" r="30" fill="rgba(250, 204, 21, 0.2)" stroke="none" class="animate-pulse"/>
+                            <circle r="20" fill="#0b1912" stroke="#eab308" stroke-width="2"/>
+                            <path d="M -8 10 L -4 -5 L 0 5 L 4 -5 L 8 10" fill="none" stroke="#eab308" stroke-width="2" id="bulb-filament"/>
+                            <text id="svg-text-load" x="28" y="4" fill="#eab308" font-family="monospace" font-size="12" data-i18n="svg_load">Load (R)</text>
+                        </g>
+
+                        <!-- Short Circuit Wire -->
+                        <path id="short-wire" d="M 220 70 L 220 230" fill="none" stroke="#ef4444" stroke-width="4" stroke-dasharray="4,4" opacity="0"/>
+                        
+                        <g id="spark-group" transform="translate(220, 150)" opacity="0">
+                            <polygon points="0,-15 5,-2 -2,-2 8,15 -1,2 4,2" fill="#ef4444" class="animate-ping"/>
+                            <text id="svg-text-bypass" x="12" y="4" fill="#ef4444" font-family="monospace" font-size="11" font-weight="bold" data-i18n="svg_bypass">LOW R BYPASS!</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Fundamental Quantities & AC vs DC -->
+        <section id="slide-1" class="slide-enter hidden workbench-panel p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-green-900/50 pb-3">
+                <div>
+                    <span class="text-xs font-mono text-green-400 uppercase tracking-widest" data-i18n="sec2_tag">Section 02 / Parameters & Waveforms</span>
+                    <h2 class="text-2xl font-bold font-mono text-white flex items-center gap-2">
+                        <i data-lucide="activity" class="text-green-400"></i> <span data-i18n="sec2_title">Fundamental Quantities & AC / DC</span>
+                    </h2>
+                </div>
+                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec2_badge">
+                    Signals & Units
+                </span>
+            </div>
+
+            <!-- Parameters Grid -->
+            <h3 class="font-mono text-base text-green-400 mb-3 flex items-center gap-2">
+                <i data-lucide="sliders" class="w-4 h-4"></i> <span data-i18n="sec2_subtitle">Fundamental Electrical Parameters</span>
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Voltage -->
+                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-sky-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-sky-400">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-mono font-bold text-sky-400" data-i18n="q_v_name">Voltage (V)</h4>
+                        <span class="text-xs font-mono bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800" data-i18n="q_v_unit">Volt [V]</span>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="q_v_desc">
+                        Electric potential difference; the electromotive force driving charge through a conductor.
+                    </p>
+                </div>
+
+                <!-- Current -->
+                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-emerald-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-emerald-400">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-mono font-bold text-emerald-400" data-i18n="q_i_name">Current (I)</h4>
+                        <span class="text-xs font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800" data-i18n="q_i_unit">Ampere [A]</span>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="q_i_desc">
+                        The rate of electric charge flow passing a given point per unit time ($I = Q / t$).
+                    </p>
+                </div>
+
+                <!-- Resistance -->
+                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-amber-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-amber-400">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-mono font-bold text-amber-400" data-i18n="q_r_name">Resistance (R)</h4>
+                        <span class="text-xs font-mono bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800" data-i18n="q_r_unit">Ohm [Ω]</span>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="q_r_desc">
+                        The opposition to the flow of electric current, dissipating energy as heat.
+                    </p>
+                </div>
+
+                <!-- Capacitance & Inductance -->
+                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-purple-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-purple-400">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-mono font-bold text-purple-400" data-i18n="q_cl_name">Cap. (C) / Ind. (L)</h4>
+                        <span class="text-xs font-mono bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded border border-purple-800" data-i18n="q_cl_unit">Farad [F] / Henry [H]</span>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="q_cl_desc">
+                        Ability to store electrical energy in electric fields (C) or magnetic fields (L).
+                    </p>
+                </div>
+            </div>
+
+            <!-- AC vs DC Comparison & Live Waveforms -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Waveform Canvas Display & Interactive AC Frequency Control -->
+                <div class="screen-inset p-4 rounded-xl flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="font-mono text-sm font-bold text-green-400 flex items-center gap-2">
+                            <i data-lucide="waves" class="w-4 h-4"></i> <span data-i18n="scope_title">Oscilloscope Signal Visualizer</span>
+                        </span>
+                        <div class="flex space-x-2 rtl:space-x-reverse">
+                            <button onclick="setWaveform('dc')" id="btn-dc-wave" class="px-3 py-1 text-xs font-mono bg-sky-600 text-white rounded shadow" data-i18n="btn_dc">Direct Current (DC)</button>
+                            <button onclick="setWaveform('ac')" id="btn-ac-wave" class="px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded" data-i18n="btn_ac">Alternating (AC)</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Oscilloscope Canvas -->
+                    <div class="w-full h-44 relative overflow-hidden rounded border border-green-900/50 bg-slate-950">
+                        <canvas id="waveformCanvas" class="w-full h-full block"></canvas>
+                    </div>
+
+                    <!-- Dynamic AC Frequency Interactive Controls Panel (Range: 0 to 240 Hz) -->
+                    <div id="ac-controls-panel" class="mt-4 p-3.5 bg-slate-950/80 border border-green-800/60 rounded-lg transition-all">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                            <label class="text-xs font-mono font-bold text-green-400 flex items-center gap-2">
+                                <i data-lucide="gauge" class="w-4 h-4 text-green-400"></i>
+                                <span data-i18n="lbl_ac_freq">AC Frequency (f)</span>: 
+                                <span id="val-freq" class="text-white text-sm font-bold">50</span> <span data-i18n="unit_hz" class="text-green-300">Hz</span>
+                            </label>
+
+                            <!-- Computed Physics Parameters -->
+                            <div class="flex space-x-3 rtl:space-x-reverse text-xs font-mono">
+                                <span class="bg-sky-950/80 px-2 py-0.5 rounded border border-sky-800/50">
+                                    <span class="text-slate-400" data-i18n="lbl_period">Period T:</span> 
+                                    <span id="val-period" class="text-sky-300 font-bold">20.0</span> <span data-i18n="unit_ms">ms</span>
+                                </span>
+                                <span class="bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800/50">
+                                    <span class="text-slate-400" data-i18n="lbl_omega">Angular ω:</span> 
+                                    <span id="val-omega" class="text-amber-300 font-bold">314</span> rad/s
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Frequency Range Input Slider [0 to 240 Hz] -->
+                        <input type="range" id="slider-freq" min="0" max="240" value="50" step="1" 
+                               oninput="updateAcFrequency(this.value)" 
+                               class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+
+                        <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1.5">
+                            <span data-i18n="freq_low">0 Hz (Static / ساكن)</span>
+                            <span data-i18n="freq_grid">50 Hz / 60 Hz (Power Grid / الكهرباء العامة)</span>
+                            <span data-i18n="freq_high">240 Hz (Ultra High / عالي جداً)</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-xs font-mono text-slate-400 text-center" id="wave-desc" data-i18n="wave_dc_desc">
+                        DC Signal: Unidirectional constant magnitude voltage over time.
+                    </div>
+                </div>
+
+                <!-- AC vs DC Comparison Table -->
+                <div class="workbench-panel p-4 rounded-xl border border-slate-700/60 overflow-x-auto">
+                    <h4 class="font-mono font-bold text-white mb-3 text-sm flex items-center gap-2">
+                        <i data-lucide="git-compare" class="w-4 h-4 text-green-400"></i> <span data-i18n="tbl_title">Comparison: Direct vs Alternating Current</span>
+                    </h4>
+                    <table class="w-full text-left rtl:text-right text-xs border-collapse font-mono">
+                        <thead>
+                            <tr class="border-b border-slate-700 text-green-400 bg-black/40">
+                                <th class="p-2.5" data-i18n="th_feature">Feature</th>
+                                <th class="p-2.5" data-i18n="th_dc">Direct Current (DC)</th>
+                                <th class="p-2.5" data-i18n="th_ac">Alternating Current (AC)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 text-slate-300">
+                            <tr>
+                                <td class="p-2.5 font-bold text-white" data-i18n="tr_dir">Direction</td>
+                                <td class="p-2.5 text-sky-300" data-i18n="tr_dir_dc">Flows in ONE single direction</td>
+                                <td class="p-2.5 text-amber-300" data-i18n="tr_dir_ac">Reverses direction periodically</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-white" data-i18n="tr_freq">Frequency</td>
+                                <td class="p-2.5" data-i18n="tr_freq_dc">Zero (0 Hz)</td>
+                                <td class="p-2.5" data-i18n="tr_freq_ac">50 Hz or 60 Hz</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-white" data-i18n="tr_src">Typical Source</td>
+                                <td class="p-2.5" data-i18n="tr_src_dc">Batteries, Solar Cells, DC Supplies</td>
+                                <td class="p-2.5" data-i18n="tr_src_ac">Wall Outlets, Power Grids, Inverters</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-bold text-white" data-i18n="tr_trans">Transmission</td>
+                                <td class="p-2.5" data-i18n="tr_trans_dc">Efficient for short distances / devices</td>
+                                <td class="p-2.5" data-i18n="tr_trans_ac">Efficient long distance (Transformers)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: Ohm's Law (V = I * R) -->
+        <section id="slide-2" class="slide-enter hidden workbench-panel p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-green-900/50 pb-3">
+                <div>
+                    <span class="text-xs font-mono text-green-400 uppercase tracking-widest" data-i18n="sec3_tag">Section 03 / Mathematical Law</span>
+                    <h2 class="text-2xl font-bold font-mono text-white flex items-center gap-2">
+                        <i data-lucide="calculator" class="text-green-400"></i> <span data-i18n="sec3_title">Ohm's Law: V = I × R</span>
+                    </h2>
+                </div>
+                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec3_badge">
+                    Interactive Calculator
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Ohm Triangle & Definition -->
+                <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                    <div class="screen-inset p-5 rounded-xl text-center">
+                        <h3 class="font-mono text-xs text-green-400 uppercase tracking-wider mb-2" data-i18n="ohm_tri_title">Ohm's Formula Triangle</h3>
+                        
+                        <!-- Interactive SVG Triangle -->
+                        <svg viewBox="0 0 200 160" class="w-44 h-36 mx-auto my-2 drop-shadow-md">
+                            <polygon points="100,10 10,150 190,150" fill="#0b1912" stroke="#22c55e" stroke-width="3"/>
+                            <line x1="38" y1="90" x2="162" y2="90" stroke="#22c55e" stroke-width="3"/>
+                            <line x1="100" y1="90" x2="100" y2="150" stroke="#22c55e" stroke-width="3"/>
+                            
+                            <!-- Symbols -->
+                            <text x="100" y="65" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="28" font-weight="bold">V</text>
+                            <text x="60" y="130" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="26" font-weight="bold">I</text>
+                            <text x="140" y="130" text-anchor="middle" fill="#f59e0b" font-family="monospace" font-size="26" font-weight="bold">R</text>
+                        </svg>
+
+                        <p class="text-xs text-slate-400 font-mono mt-1" data-i18n="ohm_law_def">
+                            Current (I) is directly proportional to Voltage (V) and inversely proportional to Resistance (R).
+                        </p>
+                    </div>
+
+                    <!-- Parameter Breakdown -->
+                    <div class="space-y-2 text-xs font-mono">
+                        <div class="p-3 bg-sky-950/30 border border-sky-800/40 rounded flex justify-between items-center">
+                            <span class="text-sky-300 font-bold" data-i18n="p_v_lbl">V = Voltage</span>
+                            <span class="text-slate-400" data-i18n="p_v_desc">Pushes current through circuit (Volts)</span>
+                        </div>
+                        <div class="p-3 bg-emerald-950/30 border border-emerald-800/40 rounded flex justify-between items-center">
+                            <span class="text-emerald-300 font-bold" data-i18n="p_i_lbl">I = Current</span>
+                            <span class="text-slate-400" data-i18n="p_i_desc">Flow rate of electric charge (Amps)</span>
+                        </div>
+                        <div class="p-3 bg-amber-950/30 border border-amber-800/40 rounded flex justify-between items-center">
+                            <span class="text-amber-300 font-bold" data-i18n="p_r_lbl">R = Resistance</span>
+                            <span class="text-slate-400" data-i18n="p_r_desc">Opposes charge flow (Ohms Ω)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Interactive Workbench Slider Lab -->
+                <div class="lg:col-span-7 screen-inset p-6 rounded-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-mono text-sm font-bold text-white mb-4 flex items-center justify-between">
+                            <span><i data-lucide="sliders" class="w-4 h-4 text-green-400 inline mr-1"></i> <span data-i18n="lab_exp_title">Live Interactive Experiment</span></span>
+                            <span id="power-calc" class="text-xs font-mono text-yellow-400">Power P = 0.00 W</span>
+                        </h3>
+
+                        <!-- Voltage Slider -->
+                        <div class="mb-5">
+                            <div class="flex justify-between text-xs font-mono mb-1">
+                                <label class="text-sky-400 font-bold"><span data-i18n="lbl_voltage">Voltage (V)</span>: <span id="val-v" class="text-white">12.0</span> V</label>
+                                <span class="text-slate-500" data-i18n="rng_v">Range: 1V - 24V</span>
+                            </div>
+                            <input type="range" id="slider-v" min="1" max="24" value="12" step="0.5" 
+                                   oninput="updateOhmSim()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <!-- Resistance Slider -->
+                        <div class="mb-6">
+                            <div class="flex justify-between text-xs font-mono mb-1">
+                                <label class="text-amber-400 font-bold"><span data-i18n="lbl_resistance">Resistance (R)</span>: <span id="val-r" class="text-white">10</span> Ω</label>
+                                <span class="text-slate-500" data-i18n="rng_r">Range: 1Ω - 100Ω</span>
+                            </div>
+                            <input type="range" id="slider-r" min="1" max="100" value="10" step="1" 
+                                   oninput="updateOhmSim()" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Calculated Result Badge & Physical Light Bulb Response -->
+                    <div class="bg-black/60 p-4 rounded-lg border border-green-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs font-mono text-slate-400 uppercase" data-i18n="calc_cur_lbl">Calculated Current (I = V / R)</span>
+                            <div class="text-3xl font-mono font-bold text-green-400 glow-green" id="result-i">
+                                1.20 A
+                            </div>
+                        </div>
+
+                        <!-- Dynamic SVG Interactive Light Bulb -->
+                        <div class="flex items-center space-x-3 rtl:space-x-reverse bg-slate-950 p-3 rounded-md border border-slate-800">
+                            <div class="text-center">
+                                <div class="relative w-14 h-16 mx-auto flex items-center justify-center">
+                                    <svg id="ohm-led" class="w-14 h-16 transition-all duration-200 overflow-visible" viewBox="0 0 60 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Bulb Outer Glass Contour & Glow Fill -->
+                                        <path id="bulb-body" d="M 30,5 C 16,5 8,15 8,27 C 8,35 12,41 18,48 L 18,58 C 18,60 20,62 22,62 L 38,62 C 40,62 42,60 42,58 L 42,48 C 48,41 52,35 52,27 C 52,15 44,5 30,5 Z" 
+                                              fill="rgba(234, 179, 8, 0.6)" stroke="#f59e0b" stroke-width="2.5" class="transition-all duration-200"/>
+                                        
+                                        <!-- Internal Tungsten Filament Wire (Zig-zag Coil) -->
+                                        <path id="bulb-filament-ohm" d="M 22,42 L 22,26 L 25,20 L 28,27 L 31,20 L 34,27 L 37,20 L 38,26 L 38,42" 
+                                              fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" class="transition-all duration-200"/>
+                                        
+                                        <!-- Screw Base & Metallic Contacts -->
+                                        <line x1="20" y1="62" x2="40" y2="62" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+                                        <line x1="22" y1="66" x2="38" y2="66" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+                                        <line x1="25" y1="70" x2="35" y2="70" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <span class="text-[10px] font-mono text-slate-400 mt-1 block" data-i18n="bulb_intensity">Output Bulb Intensity</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: Electronic Components & Symbols -->
+        <section id="slide-3" class="slide-enter hidden workbench-panel p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-green-900/50 pb-3">
+                <div>
+                    <span class="text-xs font-mono text-green-400 uppercase tracking-widest" data-i18n="sec4_tag">Section 04 / Component Library</span>
+                    <h2 class="text-2xl font-bold font-mono text-white flex items-center gap-2">
+                        <i data-lucide="component" class="text-green-400"></i> <span data-i18n="sec4_title">Electronic Components & Circuit Symbols</span>
+                    </h2>
+                </div>
+                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec4_badge">
+                    6 Key Components
+                </span>
+            </div>
+
+            <!-- Components Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 1. Voltage Source -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c1_title">Power Sources</h3>
+                        <span class="px-2 py-0.5 bg-green-950 text-green-300 font-mono text-xs rounded border border-green-800" data-i18n="c1_desig">Letter: V</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-around border border-slate-900 mb-3 p-2">
+                        <div class="text-center">
+                            <svg class="w-14 h-14 mx-auto" viewBox="0 0 60 60">
+                                <line x1="10" y1="30" x2="25" y2="30" stroke="#22c55e" stroke-width="2"/>
+                                <line x1="35" y1="30" x2="50" y2="30" stroke="#22c55e" stroke-width="2"/>
+                                <line x1="25" y1="18" x2="25" y2="42" stroke="#22c55e" stroke-width="3"/>
+                                <line x1="35" y1="24" x2="35" y2="36" stroke="#22c55e" stroke-width="1.5"/>
+                            </svg>
+                            <span class="text-[10px] font-mono text-slate-400" data-i18n="c1_dc">DC Source</span>
+                        </div>
+                        <div class="text-center">
+                            <svg class="w-14 h-14 mx-auto" viewBox="0 0 60 60">
+                                <circle cx="30" cy="30" r="16" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                <path d="M 20 30 Q 25 22 30 30 T 40 30" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="5" y1="30" x2="14" y2="30" stroke="#38bdf8" stroke-width="2"/>
+                                <line x1="46" y1="30" x2="55" y2="30" stroke="#38bdf8" stroke-width="2"/>
+                            </svg>
+                            <span class="text-[10px] font-mono text-slate-400" data-i18n="c1_ac">AC Source</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c1_desc">
+                        Provides potential difference (DC constant voltage or AC sinusoidal oscillating voltage) to drive current in a circuit.
+                    </p>
+                </div>
+
+                <!-- 2. Resistor -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c2_title">Resistor</h3>
+                        <span class="px-2 py-0.5 bg-amber-950 text-amber-300 font-mono text-xs rounded border border-amber-800" data-i18n="c2_desig">Letter: R</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                        <svg class="w-36 h-12" viewBox="0 0 120 40">
+                            <path d="M 10 20 L 30 20 L 35 10 L 45 30 L 55 10 L 65 30 L 75 10 L 85 30 L 90 20 L 110 20" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c2_desc">
+                        Limits electric current flow and drops voltage levels. Dissipates energy in the form of heat.
+                    </p>
+                </div>
+
+                <!-- 3. Capacitor -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c3_title">Capacitor</h3>
+                        <span class="px-2 py-0.5 bg-sky-950 text-sky-300 font-mono text-xs rounded border border-sky-800" data-i18n="c3_desig">Letter: C</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                        <svg class="w-36 h-12" viewBox="0 0 120 40">
+                            <line x1="10" y1="20" x2="52" y2="20" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line x1="68" y1="20" x2="110" y2="20" stroke="#38bdf8" stroke-width="2.5"/>
+                            <line x1="52" y1="8" x2="52" y2="32" stroke="#38bdf8" stroke-width="3"/>
+                            <line x1="68" y1="8" x2="68" y2="32" stroke="#38bdf8" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c3_desc">
+                        Stores electrical energy electrostatically in an <span class="text-sky-300">electric field</span> between conductive plates.
+                    </p>
+                </div>
+
+                <!-- 4. Inductor -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c4_title">Inductor (Coil)</h3>
+                        <span class="px-2 py-0.5 bg-purple-950 text-purple-300 font-mono text-xs rounded border border-purple-800" data-i18n="c4_desig">Letter: L</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                        <svg class="w-36 h-12" viewBox="0 0 120 40">
+                            <path d="M 10 20 L 30 20 C 30 10 42 10 42 20 C 42 10 54 10 54 20 C 54 10 66 10 66 20 C 66 10 78 10 78 20 L 110 20" fill="none" stroke="#a855f7" stroke-width="2.5"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c4_desc">
+                        Stores energy in a <span class="text-purple-300">magnetic field</span> when electric current flows through its wire turns.
+                    </p>
+                </div>
+
+                <!-- 5. Diode -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c5_title">Diode</h3>
+                        <span class="px-2 py-0.5 bg-rose-950 text-rose-300 font-mono text-xs rounded border border-rose-800" data-i18n="c5_desig">Letter: D</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                        <svg class="w-36 h-12" viewBox="0 0 120 40">
+                            <line x1="10" y1="20" x2="45" y2="20" stroke="#f43f5e" stroke-width="2.5"/>
+                            <line x1="75" y1="20" x2="110" y2="20" stroke="#f43f5e" stroke-width="2.5"/>
+                            <polygon points="45,10 45,30 75,20" fill="#f43f5e"/>
+                            <line x1="75" y1="10" x2="75" y2="30" stroke="#f43f5e" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c5_desc">
+                        A semiconductor valve that allows electric current to flow in only <span class="text-rose-300">one forward direction</span>.
+                    </p>
+                </div>
+
+                <!-- 6. Transistor -->
+                <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-mono font-bold text-white text-base" data-i18n="c6_title">Transistor (NPN)</h3>
+                        <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 font-mono text-xs rounded border border-emerald-800" data-i18n="c6_desig">Letter: Q</span>
+                    </div>
+                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                        <svg class="w-36 h-12" viewBox="0 0 120 40">
+                            <circle cx="60" cy="20" r="16" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <line x1="45" y1="12" x2="45" y2="28" stroke="#10b981" stroke-width="3"/>
+                            <line x1="10" y1="20" x2="45" y2="20" stroke="#10b981" stroke-width="2"/>
+                            <line x1="45" y1="15" x2="70" y2="8" stroke="#10b981" stroke-width="2"/>
+                            <line x1="45" y1="25" x2="70" y2="32" stroke="#10b981" stroke-width="2"/>
+                            <polygon points="68,32 60,28 62,34" fill="#10b981"/>
+                        </svg>
+                    </div>
+                    <p class="text-xs text-slate-300" data-i18n="c6_desc">
+                        A 3-terminal semiconductor device used as an <span class="text-emerald-300">electronic switch</span> or signal amplifier.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Measuring Instruments -->
+        <section id="slide-4" class="slide-enter hidden workbench-panel p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-green-900/50 pb-3">
+                <div>
+                    <span class="text-xs font-mono text-green-400 uppercase tracking-widest" data-i18n="sec5_tag">Section 05 / Test Bench Tools</span>
+                    <h2 class="text-2xl font-bold font-mono text-white flex items-center gap-2">
+                        <i data-lucide="gauge" class="text-green-400"></i> <span data-i18n="sec5_title">Electrical Measuring Instruments</span>
+                    </h2>
+                </div>
+                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec5_badge">
+                    Diagnostic Gear
+                </span>
+            </div>
+
+            <!-- Instruments List (تم تعديله لإضافة الصور الحقيقية) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Voltmeter -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
+                    <!-- حاوية الصورة للفولتميتر -->
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-sky-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);">
+                        <!-- استبدل الرابط هنا بمسار صورة الفولتميتر -->
+                        <img src="voltmeter.jpg" alt="Voltmeter" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div>
+                        <h3 class="font-mono font-bold text-white text-lg" data-i18n="m1_name">Voltmeter</h3>
+                        <p class="text-xs font-mono text-sky-400 mb-2" data-i18n="m1_unit">Measured Unit: Volts [V]</p>
+                        <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                            <li data-i18n="m1_f1">Connected in <span class="text-sky-300 font-bold">Parallel</span> across components.</li>
+                            <li data-i18n="m1_f2">Extremely high internal resistance (draws minimal current).</li>
+                            <li data-i18n="m1_f3">Measures electrical potential difference between two points.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Ammeter -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
+                    <!-- حاوية الصورة للأميتر -->
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-emerald-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(52, 211, 153, 0.3);">
+                        <!-- استبدل الرابط هنا بمسار صورة الأميتر -->
+                        <img src="ampermeter.jpg" alt="Ammeter" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div>
+                        <h3 class="font-mono font-bold text-white text-lg" data-i18n="m2_name">Ammeter</h3>
+                        <p class="text-xs font-mono text-emerald-400 mb-2" data-i18n="m2_unit">Measured Unit: Amperes [A]</p>
+                        <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                            <li data-i18n="m2_f1">Connected in <span class="text-emerald-300 font-bold">Series</span> within the branch path.</li>
+                            <li data-i18n="m2_f2">Near-zero internal resistance (prevents altering circuit current).</li>
+                            <li data-i18n="m2_f3">Measures rate of electron charge flow.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Digital Multimeter -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
+                    <!-- حاوية الصورة للملتيميتر -->
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-amber-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);">
+                        <!-- استبدل الرابط هنا بمسار صورة الملتيميتر -->
+                        <img src="digital-multimeter.jpg" alt="Multimeter" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div>
+                        <h3 class="font-mono font-bold text-white text-lg" data-i18n="m3_name">Digital Multimeter (DMM)</h3>
+                        <p class="text-xs font-mono text-amber-400 mb-2" data-i18n="m3_unit">Multi-range: V, A, Ω, F, Hz</p>
+                        <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                            <li data-i18n="m3_f1">All-in-one handheld diagnostic instrument for electrical troubleshooting.</li>
+                            <li data-i18n="m3_f2">Features auto-ranging, continuity buzzer, and diode testing.</li>
+                            <li data-i18n="m3_f3">High accuracy digital LCD measurement display.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Oscilloscope -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
+                    <!-- حاوية الصورة لراسم الإشارة -->
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-purple-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);">
+                        <!-- استبدل الرابط هنا بمسار صورة الاوسيلوسكوب -->
+                        <img src="digital-oscilloscope.jpg" alt="Oscilloscope" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div>
+                        <h3 class="font-mono font-bold text-white text-lg" data-i18n="m4_name">Oscilloscope</h3>
+                        <p class="text-xs font-mono text-purple-400 mb-2" data-i18n="m4_unit">Waveform Graph: Voltage vs Time</p>
+                        <ul class="text-xs text-slate-300 space-y-1 list-disc list-inside">
+                            <li data-i18n="m4_f1">Visualizes high-frequency AC dynamic signals over time.</li>
+                            <li data-i18n="m4_f2">Displays signal amplitude, frequency, phase shift, and distortion.</li>
+                            <li data-i18n="m4_f3">Essential for digital signal analysis & RF electronics.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Deck Navigation Bar Controls -->
+    <footer class="bg-pcbDark/95 border-t border-green-900/40 px-4 py-3 sticky bottom-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <button onclick="prevSlide()" id="prev-btn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs rounded-lg border border-slate-600 flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-green-400 rtl:rotate-180"></i> <span data-i18n="btn_prev">Previous</span>
+            </button>
+
+            <div class="font-mono text-xs text-slate-400">
+                <span data-i18n="lbl_slide">Slide</span> <span id="current-slide-num" class="text-green-400 font-bold">1</span> <span data-i18n="lbl_of">of</span> <span class="text-slate-200">5</span>
+            </div>
+
+            <button onclick="nextSlide()" id="next-btn" class="px-4 py-2 bg-green-700 hover:bg-green-600 font-mono text-xs text-white rounded-lg border border-green-500 flex items-center gap-2 transition shadow-lg">
+                <span id="next-btn-text" data-i18n="btn_next">Next</span> <i id="next-btn-icon" data-i18n-icon="arrow" data-lucide="arrow-right" class="w-4 h-4 rtl:rotate-180"></i>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Language Translation Dictionary
+        const translations = {
+            en: {
+                lab_title: "PHYSICS LAB",
+                lab_version: "Electricity and Magnetism",
+                lab_subtitle: "Interactive Circuit & Electronics Module",
+                nav_1: "1. Circuits",
+                nav_2: "2. Quantities & AC/DC",
+                nav_3: "3. Ohm's Law",
+                nav_4: "4. Components",
+                nav_5: "5. Instruments",
+                audio_fx: "Audio FX",
+                btn_prev: "Previous",
+                btn_next: "Next",
+                btn_finish: "Finish",
+                lbl_slide: "Slide",
+                lbl_of: "of",
+
+                sec1_tag: "Section 01 / Basic Circuit Theory",
+                sec1_title: "Types of Electric Circuits",
+                sec1_badge: "3 Core States",
+                sec1_desc: "An electric circuit is a closed loop or path through which electric current flows. Depending on the continuity and load resistance of the path, circuits operate in three fundamental configurations:",
+                card_closed_title: "Closed Circuit",
+                card_closed_desc: "A complete unbroken loop allows continuous electric current to flow from the voltage source, through the load (lamp), and back.",
+                card_open_title: "Open Circuit",
+                card_open_desc: "A break in the conductive path (like an open switch) prevents electrons from flowing. Infinite air resistance blocks current.",
+                card_short_title: "Short Circuit",
+                card_short_desc: "A low-resistance bypass path directly connects power terminals. Uncontrolled excessive current creates dangerous heat & spark risks.",
+                status_label: "Status:",
+                status_closed: "Current Flowing (Lamp ON)",
+                status_open: "Zero Current (Lamp OFF)",
+                status_short: "Overcurrent Hazard!",
+                schematic_title: "Schematic Oscilloscope View",
+                mode_closed: "Active Mode: Closed Circuit Continuous Flow",
+                mode_open: "Active Mode: Open Circuit (Broken Path)",
+                mode_short: "WARNING: Short Circuit (Zero Load Bypass!)",
+                svg_switch: "Switch",
+                svg_load: "Load (R)",
+                svg_bypass: "LOW R BYPASS!",
+
+                sec2_tag: "Section 02 / Parameters & Waveforms",
+                sec2_title: "Fundamental Quantities & AC / DC",
+                sec2_badge: "Signals & Units",
+                sec2_subtitle: "Fundamental Electrical Parameters",
+                q_v_name: "Voltage (V)",
+                q_v_unit: "Volt [V]",
+                q_v_desc: "Electric potential difference; the electromotive force driving charge through a conductor.",
+                q_i_name: "Current (I)",
+                q_i_unit: "Ampere [A]",
+                q_i_desc: "The rate of electric charge flow passing a given point per unit time (I = Q / t).",
+                q_r_name: "Resistance (R)",
+                q_r_unit: "Ohm [Ω]",
+                q_r_desc: "The opposition to the flow of electric current, dissipating energy as heat.",
+                q_cl_name: "Cap. (C) / Ind. (L)",
+                q_cl_unit: "Farad [F] / Henry [H]",
+                q_cl_desc: "Ability to store electrical energy in electric fields (C) or magnetic fields (L).",
+                scope_title: "Oscilloscope Signal Visualizer",
+                btn_dc: "Direct Current (DC)",
+                btn_ac: "Alternating (AC)",
+                wave_dc_desc: "DC Signal: Constant steady voltage magnitude over time (Zero frequency).",
+                wave_ac_desc: "AC Signal: Oscillating sinusoidal wave reversing polarity periodically.",
+                lbl_ac_freq: "AC Frequency (f)",
+                unit_hz: "Hz",
+                lbl_period: "Period T:",
+                unit_ms: "ms",
+                lbl_omega: "Angular ω:",
+                freq_low: "0 Hz (Static / Constant)",
+                freq_grid: "50 Hz / 60 Hz (Power Grid)",
+                freq_high: "240 Hz (Ultra High)",
+                tbl_title: "Comparison: Direct vs Alternating Current",
+                th_feature: "Feature",
+                th_dc: "Direct Current (DC)",
+                th_ac: "Alternating Current (AC)",
+                tr_dir: "Direction",
+                tr_dir_dc: "Flows in ONE single direction",
+                tr_dir_ac: "Reverses direction periodically",
+                tr_freq: "Frequency",
+                tr_freq_dc: "Zero (0 Hz)",
+                tr_freq_ac: "50 Hz or 60 Hz",
+                tr_src: "Typical Source",
+                tr_src_dc: "Batteries, Solar Cells, DC Supplies",
+                tr_src_ac: "Wall Outlets, Power Grids, Inverters",
+                tr_trans: "Transmission",
+                tr_trans_dc: "Efficient for short distances / devices",
+                tr_trans_ac: "Efficient long distance (Transformers)",
+
+                sec3_tag: "Section 03 / Mathematical Law",
+                sec3_title: "Ohm's Law: V = I × R",
+                sec3_badge: "Interactive Calculator",
+                ohm_tri_title: "Ohm's Formula Triangle",
+                ohm_law_def: "Current (I) is directly proportional to Voltage (V) and inversely proportional to Resistance (R).",
+                p_v_lbl: "V = Voltage",
+                p_v_desc: "Pushes current through circuit (Volts)",
+                p_i_lbl: "I = Current",
+                p_i_desc: "Flow rate of electric charge (Amps)",
+                p_r_lbl: "R = Resistance",
+                p_r_desc: "Opposes charge flow (Ohms Ω)",
+                lab_exp_title: "Live Interactive Experiment",
+                lbl_voltage: "Voltage (V)",
+                lbl_resistance: "Resistance (R)",
+                rng_v: "Range: 1V - 24V",
+                rng_r: "Range: 1Ω - 100Ω",
+                calc_cur_lbl: "Calculated Current (I = V / R)",
+                bulb_intensity: "Output Bulb Intensity",
+
+                sec4_tag: "Section 04 / Component Library",
+                sec4_title: "Electronic Components & Circuit Symbols",
+                sec4_badge: "6 Key Components",
+                c1_title: "Power Sources",
+                c1_desig: "Letter: V",
+                c1_dc: "DC Source",
+                c1_ac: "AC Source",
+                c1_desc: "Provides potential difference (DC constant voltage or AC sinusoidal voltage) to drive current.",
+                c2_title: "Resistor",
+                c2_desig: "Letter: R",
+                c2_desc: "Limits electric current flow and drops voltage levels. Dissipates energy as heat.",
+                c3_title: "Capacitor",
+                c3_desig: "Letter: C",
+                c3_desc: "Stores electrical energy electrostatically in an electric field between conductive plates.",
+                c4_title: "Inductor (Coil)",
+                c4_desig: "Letter: L",
+                c4_desc: "Stores energy in a magnetic field when electric current flows through its wire turns.",
+                c5_title: "Diode",
+                c5_desig: "Letter: D",
+                c5_desc: "A semiconductor valve that allows electric current to flow in only one forward direction.",
+                c6_title: "Transistor (NPN)",
+                c6_desig: "Letter: Q",
+                c6_desc: "A 3-terminal semiconductor device used as an electronic switch or signal amplifier.",
+
+                sec5_tag: "Section 05 / Test Bench Tools",
+                sec5_title: "Electrical Measuring Instruments",
+                sec5_badge: "Diagnostic Gear",
+                m1_name: "Voltmeter",
+                m1_unit: "Measured Unit: Volts [V]",
+                m1_f1: "Connected in Parallel across components.",
+                m1_f2: "Extremely high internal resistance (draws minimal current).",
+                m1_f3: "Measures electrical potential difference between two points.",
+                m2_name: "Ammeter",
+                m2_unit: "Measured Unit: Amperes [A]",
+                m2_f1: "Connected in Series within the branch path.",
+                m2_f2: "Near-zero internal resistance (prevents altering current).",
+                m2_f3: "Measures rate of electron charge flow.",
+                m3_name: "Digital Multimeter (DMM)",
+                m3_unit: "Multi-range: V, A, Ω, F, Hz",
+                m3_f1: "All-in-one handheld diagnostic instrument for electrical troubleshooting.",
+                m3_f2: "Features auto-ranging, continuity buzzer, and diode testing.",
+                m3_f3: "High accuracy digital LCD measurement display.",
+                m4_name: "Oscilloscope",
+                m4_unit: "Waveform Graph: Voltage vs Time",
+                m4_f1: "Visualizes high-frequency AC dynamic signals over time.",
+                m4_f2: "Displays signal amplitude, frequency, phase shift, and distortion.",
+                m4_f3: "Essential for digital signal analysis & RF electronics."
+            },
+            ar: {
+                lab_title: "مختبر الفيزياء",
+                lab_version: "الكهربية والمغناطيسية",
+                lab_subtitle: "وحدة الدوائر والالكترونيات التفاعلية",
+                nav_1: "1. الدوائر",
+                nav_2: "2. الكميات و AC/DC",
+                nav_3: "3. قانون أوم",
+                nav_4: "4. المكونات",
+                nav_5: "5. أجهزة القياس",
+                audio_fx: "الصوت",
+                btn_prev: "السابق",
+                btn_next: "التالي",
+                btn_finish: "إنهاء",
+                lbl_slide: "شريحة",
+                lbl_of: "من",
+
+                sec1_tag: "القسم 01 / النظرية الأساسية للدوائر",
+                sec1_title: "أنواع الدوائر الكهربائية",
+                sec1_badge: "3 حالات رئيسية",
+                sec1_desc: "الدائرة الكهربائية هي مسار مغلق يتدفق من خلاله التيار الكهربائي. بناءً على استمرارية المسار ومقاومة الحمل، تعمل الدوائر في ثلاث حالات أساسية:",
+                card_closed_title: "دائرة مغلقة (Closed)",
+                card_closed_desc: "مسار متصل بالكامل يسمح بالتدفق المستمر للتيار الكهربائي من مصدر الجهد عبر الحمل (المصباح) والعودة للمصدر.",
+                card_open_title: "دائرة مفتوحة (Open)",
+                card_open_desc: "قطع في المسار الموصل (مثل مفتاح مفتوح) يمنع حركة الإلكترونات. الهواء يوفر مقاومة نهائية تمنع سريان التيار.",
+                card_short_title: "دائرة قصر (Short Circuit)",
+                card_short_desc: "مسار بديل منخفض المقاومة يربط أطراف الطاقة مباشرة. التيار الهائل وغير المحكوم يسبب حرارة عالية وشرر خطير.",
+                status_label: "الحالة:",
+                status_closed: "التيار يتدفق (المصباح يعمل)",
+                status_open: "تيار منعدم (المصباح متوقف)",
+                status_short: "خطر تيار زائد وحرارة!",
+                schematic_title: "عرض المخطط التفاعلي",
+                mode_closed: "الحالة النشطة: دائرة مغلقة وتدفق مستمر",
+                mode_open: "الحالة النشطة: دائرة مفتوحة (مسار مقطوع)",
+                mode_short: "تحذير: دائرة قصر (تجاوز كامل للحمل!)",
+                svg_switch: "مفتاح",
+                svg_load: "الحمل (R)",
+                svg_bypass: "تجاوز منخفض المقاومة!",
+
+                sec2_tag: "القسم 02 / الكميات والموجات",
+                sec2_title: "الكميات الأساسية والمقارنة بين AC و DC",
+                sec2_badge: "الإشارات والوحدات",
+                sec2_subtitle: "الكميات الكهربائية الأساسية",
+                q_v_name: "فرق الجهد (Voltage)",
+                q_v_unit: "فولت [V]",
+                q_v_desc: "فرق الجهد الكهربائي؛ وهو القوة الدارفة الكهربائية التي تدفع الشحنات عبر الموصل.",
+                q_i_name: "شدة التيار (Current)",
+                q_i_unit: "أمبير [A]",
+                q_i_desc: "معدل تدفق الشحنات الكهربائية التي تعبر نقطة معينة في ثانية واحدة (I = Q / t).",
+                q_r_name: "المقاومة (Resistance)",
+                q_r_unit: "أوم [Ω]",
+                q_r_desc: "إعاقة وحجم ممانعة الموصل لتدفق التيار الكهربائي وتشتيت الطاقة على شكل حرارة.",
+                q_cl_name: "السعة (C) / الحث (L)",
+                q_cl_unit: "فاراد [F] / هنري [H]",
+                q_cl_desc: "القدرة على تخزين الطاقة الكهربائية في مجال كهربائي (C) أو مجال مغناطيسي (L).",
+                scope_title: "راسم الإشارة Oscilloscope",
+                btn_dc: "التيار المستمر (DC)",
+                btn_ac: "التيار المتردد (AC)",
+                wave_dc_desc: "إشارة DC: قيمة جهد ثابتة ومستقيمة باتجاه واحد مع الزمن (تردد = 0).",
+                wave_ac_desc: "إشارة AC: موجة جيبية تتغير قيمتها وتتجه دورياً بحسب التردد.",
+                lbl_ac_freq: "تردد التيار المتردد (f)",
+                unit_hz: "هرتز",
+                lbl_period: "الزمن الدوري T:",
+                unit_ms: "مللي ثانية",
+                lbl_omega: "التردد الزاوي ω:",
+                freq_low: "0 Hz (ساكن / منعدم)",
+                freq_grid: "50 Hz / 60 Hz (الشبكة العامة)",
+                freq_high: "240 Hz (عالي جداً)",
+                tbl_title: "مقارنة شائعة: التيار المستمر vs التيار المتردد",
+                th_feature: "الخاصية",
+                th_dc: "التيار المستمر (DC)",
+                th_ac: "التيار المتردد (AC)",
+                tr_dir: "اتجاه الحركة",
+                tr_dir_dc: "يتدفق في اتجاه واحد فقط ثابت",
+                tr_dir_ac: "يعكس اتجاهه بشكل دوري منتظم",
+                tr_freq: "التردد (Frequency)",
+                tr_freq_dc: "صفر (0 Hz)",
+                tr_freq_ac: "50 Hz أو 60 Hz",
+                tr_src: "المصدر الشائع",
+                tr_src_dc: "البطاريات، الخلايا الشمسية، مزودات DC",
+                tr_src_ac: "مقبس الجدار، الشبكات العامة، المحولات",
+                tr_trans: "كفاءة نقل الطاقة",
+                tr_trans_dc: "ممتاز للمسافات القصيرة والأجهزة",
+                tr_trans_ac: "كفاءة فائقة للمسافات الطويلة (المحولات)",
+
+                sec3_tag: "القسم 03 / القانون الرياضي",
+                sec3_title: "قانون أوم: V = I × R",
+                sec3_badge: "حاسبة تفاعلية",
+                ohm_tri_title: "مثلث صيغة قانون أوم",
+                ohm_law_def: "شدة التيار (I) تتناسب طردياً مع فرق الجهد (V) وعكسياً مع المقاومة (R).",
+                p_v_lbl: "V = فرق الجهد",
+                p_v_desc: "يدفع الشحنات الكهربائية (فولت)",
+                p_i_lbl: "I = شدة التيار",
+                p_i_desc: "معدل تدفق الشحنات (أمبير)",
+                p_r_lbl: "R = المقاومة",
+                p_r_desc: "يعيق تدفق الشحنات (أوم Ω)",
+                lab_exp_title: "تجربة المختبر التفاعلية المباشرة",
+                lbl_voltage: "فرق الجهد (V)",
+                lbl_resistance: "المقاومة (R)",
+                rng_v: "المدى: 1V - 24V",
+                rng_r: "المدى: 1Ω - 100Ω",
+                calc_cur_lbl: "التيار المحسوب (I = V / R)",
+                bulb_intensity: "شدة إضاءة المصباح",
+
+                sec4_tag: "القسم 04 / مكتبة العناصر",
+                sec4_title: "العناصر الإلكترونية ورموز الدائرة",
+                sec4_badge: "6 مكونات رئيسية",
+                c1_title: "مصادر الطاقة",
+                c1_desig: "الرمز: V",
+                c1_dc: "مصدر DC",
+                c1_ac: "مصدر AC",
+                c1_desc: "توفر فرق جهد (ثابت DC أو متردد جيبياً AC) لسحب وتدوير الشحنات بالدائرة.",
+                c2_title: "المقاومة (Resistor)",
+                c2_desig: "الرمز: R",
+                c2_desc: "تحد وتتحكم بشدة التيار وتخفض مستويات الجهد. تبدد الطاقة كحرارة.",
+                c3_title: "المكثف (Capacitor)",
+                c3_desig: "الرمز: C",
+                c3_desc: "يخزن الطاقة الكهربائية كـ مجالات كهربائية بين لوحين موصلين.",
+                c4_title: "الملف الحثي (Inductor)",
+                c4_desig: "الرمز: L",
+                c4_desc: "يخزن الطاقة الكهربائية كـ مجال مغناطيسي عند مرور التيار في لفاته.",
+                c5_title: "الدايود (Diode)",
+                c5_desig: "الرمز: D",
+                c5_desc: "صمام شبه موصل يسمح بمرور التيار في اتجاه أمامي واحد فقط.",
+                c6_title: "الترانزستور (Transistor)",
+                c6_desig: "الرمز: Q",
+                c6_desc: "عنصر شبه موصل بثلاثة أطراف يعمل كمفتاح إلكتروني أو مكبر للإشارات.",
+
+                sec5_tag: "القسم 05 / أدوات الفحص",
+                sec5_title: "أجهزة القياس الكهربائية",
+                sec5_badge: "معدات التشخيص",
+                m1_name: "الفولتميتر (Voltmeter)",
+                m1_unit: "وحدة القياس: الفولت [V]",
+                m1_f1: "يوصل على التوازي (Parallel) عبر طرفي المكون.",
+                m1_f2: "مقاومته الداخلية عالية جداً لمنع سحب التيار.",
+                m1_f3: "يقيس فرق الجهد الكهربائي بين نقطتين.",
+                m2_name: "الأميتر (Ammeter)",
+                m2_unit: "وحدة القياس: الأمبير [A]",
+                m2_f1: "يوصل على التوالي (Series) داخل فرع الدائرة.",
+                m2_f2: "مقاومته الداخلية شبه معدومة لعدم التأثير على التيار.",
+                m2_f3: "يقيس معدل التدفق الفعلي للشحنات.",
+                m3_name: "الافوميتر الرقمي (Multimeter)",
+                m3_unit: "متعدد النطاقات: V, A, Ω, F, Hz",
+                m3_f1: "جهاز قياس شامل ومحمول لتشخيص واختبار أعطال الدوائر.",
+                m3_f2: "يتضمن التحديد الآلي للمدى، جرس الاتصالية، واختبار الدايود.",
+                m3_f3: "شاشة رقمية عالية الدقة لعرض النتائج.",
+                m4_name: "راسم الإشارة (Oscilloscope)",
+                m4_unit: "رسم بياني للموجة: الجهد مقابل الزمن",
+                m4_f1: "يعرض ويحلل موجات الإشارات المترددة والسريعة عبر الزمن.",
+                m4_f2: "يقيس السعة، التردد، زاوية الوجه، وتشوف الموجة.",
+                m4_f3: "ضروري لتحليل الإشارات الرقمية والترددات العالية."
+            }
+        };
+
+        // State Variables
+        let currentLang = 'ar';
+        let currentSlide = 0;
+        const totalSlides = 5;
+        let audioEnabled = true;
+        let activeCircuitType = 'closed';
+        let canvasAnimId = null;
+        let waveformType = 'dc';
+        let acFrequency = 50;
+
+        // Audio Engine
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq = 440, type = 'sine', duration = 0.08) {
+            if (!audioEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'en') ? 'ar' : 'en';
+            applyLanguage(currentLang);
+            playTone(650, 'sine', 0.05);
+        }
+
+        function applyLanguage(lang) {
+            const htmlTag = document.documentElement;
+            const langBtnText = document.getElementById('lang-btn-text');
+            const svgDcText = document.getElementById('svg-text-dc');
+            const svgLoadText = document.getElementById('svg-text-load');
+            const svgSwitchText = document.getElementById('svg-text-switch'); 
+            const svgBypassText = document.getElementById('svg-text-bypass');
+
+            if (lang === 'ar') {
+                htmlTag.setAttribute('dir', 'rtl');
+                htmlTag.setAttribute('lang', 'ar');
+                langBtnText.innerText = "English";
+
+                if(svgDcText) svgDcText.setAttribute('x', '-38');
+                if(svgLoadText) svgLoadText.setAttribute('x', '90');
+                
+                if(svgSwitchText) {
+                    svgSwitchText.setAttribute('x', '13'); 
+                    svgSwitchText.setAttribute('y', '25');
+                }
+
+                if(svgBypassText) {
+                    svgBypassText.setAttribute('x', '150');
+                    svgBypassText.setAttribute('y', '0');
+                }
+
+            } else {
+                htmlTag.setAttribute('dir', 'ltr');
+                htmlTag.setAttribute('lang', 'en');
+                langBtnText.innerText = "العربية";
+
+                if(svgDcText) svgDcText.setAttribute('x', '-80');
+                if(svgLoadText) svgLoadText.setAttribute('x', '28');
+                
+                if(svgSwitchText) {
+                    svgSwitchText.setAttribute('x', '-20');
+                    svgSwitchText.setAttribute('y', '25');
+                }
+
+                if(svgBypassText) {
+                    svgBypassText.setAttribute('x', '12'); 
+                    svgBypassText.setAttribute('y', '4');  
+                }
+            }
+
+            const dict = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                const key = elem.getAttribute('data-i18n');
+                if (dict[key]) {
+                    elem.textContent = dict[key];
+                }
+            });
+
+            selectCircuitType(activeCircuitType, false);
+            setWaveform(waveformType, false);
+            updateSlideView();
+            lucide.createIcons();
+        }
+
+        window.onload = function() {
+            applyLanguage(currentLang);
+            lucide.createIcons();
+            updateSlideView();
+            initWaveformCanvas();
+            updateOhmSim();
+            updateAcFrequency(acFrequency, false);
+        }
+
+        function goToSlide(index) {
+            if (index < 0 || index >= totalSlides) return;
+            
+            const curElem = document.getElementById(`slide-${currentSlide}`);
+            curElem.classList.add('hidden');
+            curElem.classList.remove('slide-active');
+
+            currentSlide = index;
+            playTone(520, 'sine', 0.06);
+
+            const newElem = document.getElementById(`slide-${currentSlide}`);
+            newElem.classList.remove('hidden');
+            setTimeout(() => {
+                newElem.classList.add('slide-active');
+                if (currentSlide === 1) {
+                    resizeWaveformCanvas();
+                }
+            }, 10);
+
+            updateSlideView();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function updateSlideView() {
+            document.getElementById('current-slide-num').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            
+            const nextBtnText = document.getElementById('next-btn-text');
+            if (currentSlide === totalSlides - 1) {
+                nextBtnText.textContent = translations[currentLang].btn_finish;
+            } else {
+                nextBtnText.textContent = translations[currentLang].btn_next;
+            }
+
+            for (let i = 0; i < totalSlides; i++) {
+                const navBtn = document.getElementById(`nav-btn-${i}`);
+                if (i === currentSlide) {
+                    navBtn.className = "px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1 bg-green-600 text-white font-bold shadow-md";
+                } else {
+                    navBtn.className = "px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1 bg-transparent text-slate-400 hover:text-white";
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                currentLang === 'ar' ? prevSlide() : nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                currentLang === 'ar' ? nextSlide() : prevSlide();
+            }
+        });
+
+        function toggleAudioFeedback() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('audio-btn');
+            if (audioEnabled) {
+                btn.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4 text-green-400"></i> <span data-i18n="audio_fx">${translations[currentLang].audio_fx}</span>`;
+                playTone(600, 'sine', 0.1);
+            } else {
+                btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4 text-slate-500"></i> <span data-i18n="audio_fx">${translations[currentLang].audio_fx}</span>`;
+            }
+            lucide.createIcons();
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function selectCircuitType(type, playAudio = true) {
+            activeCircuitType = type;
+            if (playAudio) playTone(400, 'triangle', 0.05);
+
+            ['closed', 'open', 'short'].forEach(t => {
+                const card = document.getElementById(`card-${t}`);
+                const led = document.getElementById(`led-${t}`);
+                card.className = "cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group";
+                led.className = "led-indicator led-off";
+            });
+
+            const activeCard = document.getElementById(`card-${type}`);
+            const activeLed = document.getElementById(`led-${type}`);
+            const switchArm = document.getElementById('switch-arm');
+            const stream = document.getElementById('electron-stream');
+            const bulbGlow = document.getElementById('bulb-glow');
+            const bulbFilament = document.getElementById('bulb-filament');
+            const shortWire = document.getElementById('short-wire');
+            const sparkGroup = document.getElementById('spark-group');
+            const summaryTag = document.getElementById('circuit-summary-tag');
+
+            const dict = translations[currentLang];
+
+            if (type === 'closed') {
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/20 transition-all rounded-xl relative group";
+                activeLed.className = "led-indicator led-green";
+                
+                switchArm.setAttribute('x2', '28');
+                switchArm.setAttribute('y2', '0');
+                stream.style.display = 'block';
+                stream.setAttribute('stroke', '#22c55e');
+                bulbGlow.setAttribute('opacity', '1');
+                bulbFilament.setAttribute('stroke', '#eab308');
+                shortWire.setAttribute('opacity', '0');
+                sparkGroup.setAttribute('opacity', '0');
+                summaryTag.textContent = dict.mode_closed;
+                summaryTag.className = "text-xs font-mono text-green-400";
+            } else if (type === 'open') {
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-amber-500/80 bg-amber-950/20 transition-all rounded-xl relative group";
+                activeLed.className = "led-indicator led-orange";
+
+                switchArm.setAttribute('x2', '15');
+                switchArm.setAttribute('y2', '-25');
+                stream.style.display = 'none';
+                bulbGlow.setAttribute('opacity', '0');
+                bulbFilament.setAttribute('stroke', '#64748b');
+                shortWire.setAttribute('opacity', '0');
+                sparkGroup.setAttribute('opacity', '0');
+                summaryTag.textContent = dict.mode_open;
+                summaryTag.className = "text-xs font-mono text-amber-400";
+            } else if (type === 'short') {
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-rose-500/80 bg-rose-950/20 transition-all rounded-xl relative group";
+                activeLed.className = "led-indicator led-red";
+
+                switchArm.setAttribute('x2', '28');
+                switchArm.setAttribute('y2', '0');
+                stream.style.display = 'block';
+                stream.setAttribute('stroke', '#ef4444');
+                bulbGlow.setAttribute('opacity', '0');
+                bulbFilament.setAttribute('stroke', '#64748b');
+                shortWire.setAttribute('opacity', '1');
+                sparkGroup.setAttribute('opacity', '1');
+                summaryTag.textContent = dict.mode_short;
+                summaryTag.className = "text-xs font-mono text-rose-400 font-bold";
+                if (playAudio) playTone(800, 'sawtooth', 0.2);
+            }
+        }
+
+        // Oscilloscope & Waveform Rendering
+        let waveCanvas, waveCtx, canvasWidth, canvasHeight, offset = 0;
+
+        function updateAcFrequency(val, playSound = true) {
+            acFrequency = parseFloat(val);
+            document.getElementById('val-freq').textContent = acFrequency;
+
+            if (acFrequency === 0) {
+                document.getElementById('val-period').textContent = '∞';
+                document.getElementById('val-omega').textContent = '0';
+            } else {
+                const periodMs = (1000 / acFrequency).toFixed(1);
+                const omegaRad = Math.round(2 * Math.PI * acFrequency);
+                document.getElementById('val-period').textContent = periodMs;
+                document.getElementById('val-omega').textContent = omegaRad;
+            }
+
+            if (playSound && audioEnabled && acFrequency > 0) {
+                const toneFreq = 80 + (acFrequency * 2.5);
+                playTone(toneFreq, 'sine', 0.03);
+            }
+        }
+
+        function resizeWaveformCanvas() {
+            if (!waveCanvas) return;
+            const rect = waveCanvas.parentElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            
+            canvasWidth = rect.width;
+            canvasHeight = rect.height || 176;
+
+            waveCanvas.width = canvasWidth * dpr;
+            waveCanvas.height = canvasHeight * dpr;
+            
+            waveCtx.scale(dpr, dpr);
+        }
+
+        function initWaveformCanvas() {
+            waveCanvas = document.getElementById('waveformCanvas');
+            if (!waveCanvas) return;
+            waveCtx = waveCanvas.getContext('2d');
+
+            resizeWaveformCanvas();
+            window.addEventListener('resize', resizeWaveformCanvas);
+
+            function draw() {
+                if (!waveCtx || canvasWidth === 0) {
+                    canvasAnimId = requestAnimationFrame(draw);
+                    return;
+                }
+
+                waveCtx.fillStyle = '#06120c';
+                waveCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                waveCtx.strokeStyle = 'rgba(16, 42, 29, 0.8)';
+                waveCtx.lineWidth = 1;
+
+                const gridStep = 25;
+                for (let x = 0; x < canvasWidth; x += gridStep) {
+                    waveCtx.beginPath();
+                    waveCtx.moveTo(x, 0);
+                    waveCtx.lineTo(x, canvasHeight);
+                    waveCtx.stroke();
+                }
+                for (let y = 0; y < canvasHeight; y += gridStep) {
+                    waveCtx.beginPath();
+                    waveCtx.moveTo(0, y);
+                    waveCtx.lineTo(canvasWidth, y);
+                    waveCtx.stroke();
+                }
+
+                waveCtx.strokeStyle = 'rgba(30, 61, 44, 0.9)';
+                waveCtx.lineWidth = 1.5;
+                waveCtx.beginPath();
+                waveCtx.moveTo(0, canvasHeight / 2);
+                waveCtx.lineTo(canvasWidth, canvasHeight / 2);
+                waveCtx.stroke();
+
+                waveCtx.beginPath();
+                waveCtx.lineWidth = 3.5;
+
+                if (waveformType === 'dc') {
+                    waveCtx.strokeStyle = '#38bdf8';
+                    waveCtx.shadowColor = '#38bdf8';
+                    waveCtx.shadowBlur = 10;
+                    
+                    const dcY = canvasHeight / 2 - 35;
+                    waveCtx.moveTo(0, dcY);
+                    waveCtx.lineTo(canvasWidth, dcY);
+                    waveCtx.stroke();
+
+                    waveCtx.fillStyle = '#bae6fd';
+                    for (let p = 0; p < canvasWidth; p += 60) {
+                        const px = (p + offset * 1.5) % canvasWidth;
+                        waveCtx.beginPath();
+                        waveCtx.arc(px, dcY, 3, 0, Math.PI * 2);
+                        waveCtx.fill();
+                    }
+                    offset += 1;
+                } else {
+                    waveCtx.strokeStyle = '#22c55e';
+                    waveCtx.shadowColor = '#22c55e';
+                    waveCtx.shadowBlur = 10;
+
+                    const amplitude = Math.min(50, canvasHeight / 2.6);
+                    const spatialFreq = (acFrequency / 240) * 0.08;
+
+                    if (acFrequency === 0) {
+                        waveCtx.moveTo(0, canvasHeight / 2);
+                        waveCtx.lineTo(canvasWidth, canvasHeight / 2);
+                    } else {
+                        for (let x = 0; x <= canvasWidth; x += 2) {
+                            const y = canvasHeight / 2 + Math.sin((x - offset) * spatialFreq) * amplitude;
+                            if (x === 0) waveCtx.moveTo(x, y);
+                            else waveCtx.lineTo(x, y);
+                        }
+                    }
+                    waveCtx.stroke();
+
+                    offset += (acFrequency / 50) * 2.2;
+                }
+
+                waveCtx.shadowBlur = 0;
+                canvasAnimId = requestAnimationFrame(draw);
+            }
+
+            if (canvasAnimId) cancelAnimationFrame(canvasAnimId);
+            draw();
+        }
+
+        function setWaveform(type, playAudio = true) {
+            waveformType = type;
+            if (playAudio) playTone(500, 'sine', 0.05);
+            const btnDc = document.getElementById('btn-dc-wave');
+            const btnAc = document.getElementById('btn-ac-wave');
+            const desc = document.getElementById('wave-desc');
+            const acPanel = document.getElementById('ac-controls-panel');
+            const dict = translations[currentLang];
+
+            if (type === 'dc') {
+                btnDc.className = "px-3 py-1 text-xs font-mono bg-sky-600 text-white rounded shadow font-bold";
+                btnAc.className = "px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded";
+                desc.textContent = dict.wave_dc_desc;
+                acPanel.classList.add('opacity-40', 'pointer-events-none');
+            } else {
+                btnAc.className = "px-3 py-1 text-xs font-mono bg-green-600 text-white rounded shadow font-bold";
+                btnDc.className = "px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded";
+                desc.textContent = dict.wave_ac_desc;
+                acPanel.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        }
+
+        // --- SECTION 3 (OHM'S LAW) DYNAMIC LIGHT BULB SIMULATION ---
+        function updateOhmSim() {
+            const v = parseFloat(document.getElementById('slider-v').value);
+            const r = parseFloat(document.getElementById('slider-r').value);
+
+            document.getElementById('val-v').textContent = v.toFixed(1);
+            document.getElementById('val-r').textContent = r.toString();
+
+            const i = v / r;
+            const power = v * i;
+
+            document.getElementById('result-i').textContent = `${i.toFixed(2)} A`;
+            document.getElementById('power-calc').textContent = `Power P = ${power.toFixed(2)} W`;
+
+            // Elements for SVG Light Bulb
+            const bulbSvg = document.getElementById('ohm-led');
+            const bulbBody = document.getElementById('bulb-body');
+            const bulbFilament = document.getElementById('bulb-filament-ohm');
+
+            const intensity = Math.min(i / 2, 1);
+            const glowRadius = Math.max(4, intensity * 35);
+
+            // Dynamic Drop Shadow Glow (SVG Glow Filter)
+            bulbSvg.style.filter = `drop-shadow(0 0 ${glowRadius}px rgba(234, 179, 8, ${intensity}))`;
+            
+            // Dynamic Glass Color & Opacity Response
+            bulbBody.style.fill = `rgba(234, 179, 8, ${0.1 + intensity * 0.85})`;
+            bulbBody.style.stroke = intensity > 0.1 ? '#f59e0b' : '#475569';
+            
+            // Filament Wire Dynamic Heating & Brightness Response
+            if (intensity > 0.05) {
+                bulbFilament.style.stroke = '#ffffff';
+                bulbFilament.style.filter = `drop-shadow(0 0 4px #ffffff)`;
+            } else {
+                bulbFilament.style.stroke = '#64748b';
+                bulbFilament.style.filter = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
