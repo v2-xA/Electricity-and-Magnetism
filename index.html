@@ -19,7 +19,7 @@
                 extend: {
                     colors: {
                         pcb: '#0b1912',
-                        pcbDark: '#050c09',
+                        pcbDark: '#030806',
                         pcbBoard: '#12261c',
                         copper: '#d97706',
                         copperGlow: '#f59e0b',
@@ -39,35 +39,76 @@
     </script>
     <style>
         body {
-            background-color: #050c09;
+            background-color: #030806;
             color: #e2e8f0;
             overflow-x: hidden;
             font-family: 'Inter', 'Tajawal', sans-serif;
             transition: direction 0.3s ease, font-family 0.3s ease;
         }
 
-        /* PCB Grid Background Pattern */
-        .pcb-grid {
-            background-color: #0b1912;
+        /* Enhanced Futuristic High-Tech PCB Grid Background */
+        .pcb-grid-enhanced {
+            background-color: #030806;
             background-image: 
-                radial-gradient(#1e3a2b 1px, transparent 1px), 
-                radial-gradient(#1e3a2b 1px, #0b1912 1px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
+                /* Subtle Ambient Central Glow */
+                radial-gradient(circle at 50% 15%, rgba(34, 197, 94, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 85% 75%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 15% 85%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
+                /* Modern Cyber Grid Lines */
+                linear-gradient(to right, rgba(20, 60, 40, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(20, 60, 40, 0.25) 1px, transparent 1px),
+                /* Micro PCB Dot Matrix */
+                radial-gradient(rgba(34, 197, 94, 0.25) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px, 20px 20px;
+            background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 10px 10px;
+            background-attachment: fixed;
         }
 
-        /* Skeuomorphic Glass & Metallic Panels */
+        /* Dynamic Glassmorphic Panels (تأثير الزجاج الشفاف النيون) */
         .workbench-panel {
-            background: linear-gradient(145deg, #142c20, #0d1e16);
-            border: 1px solid #234e38;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 10px 25px -5px rgba(0, 0, 0, 0.7);
-            border-radius: 0.75rem;
+            background: rgba(8, 20, 14, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            box-shadow: 
+                inset 0 1px 1px rgba(255, 255, 255, 0.1),
+                0 20px 40px -15px rgba(0, 0, 0, 0.8),
+                0 0 15px rgba(34, 197, 94, 0.05);
+            border-radius: 1rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .workbench-panel:hover {
+            border-color: rgba(34, 197, 94, 0.4);
+            box-shadow: 
+                inset 0 1px 1px rgba(255, 255, 255, 0.15),
+                0 22px 45px -10px rgba(0, 0, 0, 0.9),
+                0 0 25px rgba(34, 197, 94, 0.12);
         }
 
         .screen-inset {
-            background-color: #06120c;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 2px rgba(34, 197, 94, 0.2);
-            border: 1px solid #1c3d2c;
+            background-color: rgba(4, 14, 9, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 5px rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(28, 61, 44, 0.7);
+        }
+
+        /* Animated Ambient Background Glow Blobs */
+        .glow-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+            animation: pulse-slow 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse-slow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.25; }
+            50% { transform: scale(1.1) translate(15px, -15px); opacity: 0.45; }
+            100% { transform: scale(0.95) translate(-10px, 20px); opacity: 0.3; }
         }
 
         /* LED Indicator Lights */
@@ -79,16 +120,14 @@
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6);
             transition: all 0.3s ease;
         }
-        .led-green { background-color: #22c55e; box-shadow: 0 0 10px #22c55e, inset 0 1px 2px #fff; }
-        .led-red { background-color: #ef4444; box-shadow: 0 0 10px #ef4444, inset 0 1px 2px #fff; }
-        .led-orange { background-color: #f59e0b; box-shadow: 0 0 10px #f59e0b, inset 0 1px 2px #fff; }
+        .led-green { background-color: #22c55e; box-shadow: 0 0 12px #22c55e, inset 0 1px 2px #fff; }
+        .led-red { background-color: #ef4444; box-shadow: 0 0 12px #ef4444, inset 0 1px 2px #fff; }
+        .led-orange { background-color: #f59e0b; box-shadow: 0 0 12px #f59e0b, inset 0 1px 2px #fff; }
         .led-off { background-color: #1e3a2a; box-shadow: inset 0 1px 3px rgba(0,0,0,0.8); }
 
         /* Current Flow Animation */
         @keyframes dash {
-            to {
-                stroke-dashoffset: -40;
-            }
+            to { stroke-dashoffset: -40; }
         }
         .electron-flow {
             stroke-dasharray: 8, 8;
@@ -98,12 +137,12 @@
         /* Slide Transition Animations */
         .slide-enter {
             opacity: 0;
-            transform: translateY(20px) scale(0.98);
+            transform: translateY(24px) scale(0.98);
         }
         .slide-active {
             opacity: 1;
             transform: translateY(0) scale(1);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         /* Custom Range Slider */
@@ -112,15 +151,15 @@
         }
 
         /* Glowing text effects */
-        .glow-green { text-shadow: 0 0 8px rgba(34, 197, 94, 0.6); }
+        .glow-green { text-shadow: 0 0 10px rgba(34, 197, 94, 0.7); }
 
         /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        ::-webkit-scrollbar-track { background: #08140e; }
-        ::-webkit-scrollbar-thumb { background: #1e3d2c; border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: #030806; }
+        ::-webkit-scrollbar-thumb { background: #1c3d2a; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
 
         /* RTL Adjustments */
@@ -132,55 +171,61 @@
         }
     </style>
 </head>
-<body class="pcb-grid min-h-screen flex flex-col justify-between select-none text-slate-200">
+
+<body class="pcb-grid-enhanced min-h-screen flex flex-col justify-between select-none text-slate-100 antialiased selection:bg-green-500 selection:text-black relative">
+
+    <!-- Atmospheric Ambient Glowing Light Sources (تأثير أضواء خلفية تفاعلية) -->
+    <div class="glow-blob w-[450px] h-[450px] bg-emerald-500/20 top-[-100px] right-[10%]"></div>
+    <div class="glow-blob w-[400px] h-[400px] bg-sky-500/15 bottom-[5%] left-[5%]" style="animation-delay: -3s;"></div>
+    <div class="glow-blob w-[300px] h-[300px] bg-purple-500/10 top-[40%] left-[45%]" style="animation-delay: -5s;"></div>
 
     <!-- Top Workbench Header Control Bar -->
-    <header class="bg-pcbDark/90 border-b border-green-900/40 px-4 py-3 sticky top-0 z-50 backdrop-blur-md">
+    <header class="bg-pcbDark/80 border-b border-green-900/50 px-4 py-3 sticky top-0 z-50 backdrop-blur-xl shadow-lg">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <!-- Title & Lab Specs -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
-                <div class="p-2 bg-green-950 border border-green-600/40 rounded-lg text-green-400">
+                <div class="p-2 bg-green-950/80 border border-green-500/40 rounded-xl text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.25)]">
                     <i data-lucide="zap" class="w-6 h-6 animate-pulse"></i>
                 </div>
                 <div>
                     <h1 class="text-lg font-bold font-mono tracking-wider text-green-400 flex items-center gap-2">
                         <span data-i18n="lab_title">PHYSICS LAB</span>
-                        <span class="text-xs bg-green-900/60 text-green-300 px-2 py-0.5 rounded border border-green-600/30" data-i18n="lab_version">Electricity and Magnetism</span>
+                        <span class="text-xs bg-green-950/80 text-green-300 px-2 py-0.5 rounded-full border border-green-500/30" data-i18n="lab_version">Electricity and Magnetism</span>
                     </h1>
                     <p class="text-xs text-slate-400" data-i18n="lab_subtitle">Interactive Circuit & Electronics Module</p>
                 </div>
             </div>
 
             <!-- Slide Navigation Indicators (Step Dots) -->
-            <div class="hidden lg:flex items-center space-x-2 rtl:space-x-reverse bg-black/40 p-1.5 rounded-full border border-green-900/40">
-                <button onclick="goToSlide(0)" id="nav-btn-0" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+            <div class="hidden lg:flex items-center space-x-2 rtl:space-x-reverse bg-black/50 p-1.5 rounded-full border border-green-900/50 backdrop-blur-md shadow-inner">
+                <button onclick="goToSlide(0)" id="nav-btn-0" class="px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_1">1. Circuits</span>
                 </button>
-                <button onclick="goToSlide(1)" id="nav-btn-1" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                <button onclick="goToSlide(1)" id="nav-btn-1" class="px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_2">2. Quantities & AC/DC</span>
                 </button>
-                <button onclick="goToSlide(2)" id="nav-btn-2" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                <button onclick="goToSlide(2)" id="nav-btn-2" class="px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_3">3. Ohm's Law</span>
                 </button>
-                <button onclick="goToSlide(3)" id="nav-btn-3" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                <button onclick="goToSlide(3)" id="nav-btn-3" class="px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_4">4. Components</span>
                 </button>
-                <button onclick="goToSlide(4)" id="nav-btn-4" class="px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1">
+                <button onclick="goToSlide(4)" id="nav-btn-4" class="px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-slate-600"></span> <span data-i18n="nav_5">5. Instruments</span>
                 </button>
             </div>
 
             <!-- Action Controls & Language Switcher -->
             <div class="flex items-center space-x-3 rtl:space-x-reverse">
-                <button onclick="toggleLanguage()" id="lang-btn" class="px-3 py-1.5 bg-green-900/60 hover:bg-green-800 text-green-300 font-mono text-xs rounded border border-green-600/50 flex items-center gap-1.5 transition shadow-sm font-bold">
+                <button onclick="toggleLanguage()" id="lang-btn" class="px-3 py-1.5 bg-green-950/70 hover:bg-green-900/80 text-green-300 font-mono text-xs rounded-lg border border-green-500/40 flex items-center gap-1.5 transition shadow-sm font-bold backdrop-blur-sm">
                     <i data-lucide="languages" class="w-4 h-4 text-green-400"></i>
                     <span id="lang-btn-text">English</span>
                 </button>
 
-                <button onclick="toggleAudioFeedback()" id="audio-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-mono rounded border border-slate-600 flex items-center gap-1.5 transition">
+                <button onclick="toggleAudioFeedback()" id="audio-btn" class="px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 text-xs font-mono rounded-lg border border-slate-700/80 flex items-center gap-1.5 transition backdrop-blur-sm">
                     <i data-lucide="volume-2" class="w-4 h-4 text-green-400"></i> <span data-i18n="audio_fx">Audio FX</span>
                 </button>
-                <button onclick="toggleFullscreen()" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-xs rounded border border-slate-600 transition" title="Toggle Fullscreen">
+                <button onclick="toggleFullscreen()" class="p-1.5 bg-slate-900/80 hover:bg-slate-800 text-xs rounded-lg border border-slate-700/80 transition backdrop-blur-sm" title="Toggle Fullscreen">
                     <i data-lucide="maximize" class="w-4 h-4 text-slate-300"></i>
                 </button>
             </div>
@@ -188,7 +233,7 @@
     </header>
 
     <!-- Main Presentation Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full relative">
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full relative z-10">
 
         <!-- SECTION 1: Types of Electric Circuits -->
         <section id="slide-0" class="slide-active workbench-panel p-6 shadow-2xl relative overflow-hidden">
@@ -199,7 +244,7 @@
                         <i data-lucide="cpu" class="text-green-400"></i> <span data-i18n="sec1_title">Types of Electric Circuits</span>
                     </h2>
                 </div>
-                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec1_badge">
+                <span class="px-3 py-1 bg-green-950/80 text-green-400 border border-green-700/50 text-xs rounded-full font-mono backdrop-blur-sm" data-i18n="sec1_badge">
                     3 Core States
                 </span>
             </div>
@@ -211,7 +256,7 @@
             <!-- Circuit Type Selector Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <!-- 1. Closed Circuit Card -->
-                <div onclick="selectCircuitType('closed')" id="card-closed" class="cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/20 hover:bg-green-900/30 transition-all rounded-xl relative group">
+                <div onclick="selectCircuitType('closed')" id="card-closed" class="cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/30 hover:bg-green-900/40 transition-all rounded-xl relative group">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-green-400 text-lg flex items-center gap-2">
                             <span id="led-closed" class="led-indicator led-green"></span> <span data-i18n="card_closed_title">Closed Circuit</span>
@@ -221,13 +266,13 @@
                     <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_closed_desc">
                         A complete unbroken loop allows continuous electric current to flow from the voltage source, through the load (lamp), and back.
                     </p>
-                    <div class="text-xs font-mono text-green-300 bg-green-950/80 p-2 rounded border border-green-800/40">
+                    <div class="text-xs font-mono text-green-300 bg-green-950/60 p-2 rounded-lg border border-green-800/40 backdrop-blur-sm">
                         <span data-i18n="status_label">Status:</span> <span class="font-bold text-green-400" data-i18n="status_closed">Current Flowing (Lamp ON)</span>
                     </div>
                 </div>
 
                 <!-- 2. Open Circuit Card -->
-                <div onclick="selectCircuitType('open')" id="card-open" class="cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group">
+                <div onclick="selectCircuitType('open')" id="card-open" class="cursor-pointer workbench-panel p-5 border border-slate-700/80 bg-slate-900/30 hover:bg-slate-800/40 transition-all rounded-xl relative group">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-amber-400 text-lg flex items-center gap-2">
                             <span id="led-open" class="led-indicator led-off"></span> <span data-i18n="card_open_title">Open Circuit</span>
@@ -237,13 +282,13 @@
                     <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_open_desc">
                         A break in the conductive path (like an open switch) prevents electrons from flowing. Infinite air resistance blocks current.
                     </p>
-                    <div class="text-xs font-mono text-amber-300 bg-amber-950/40 p-2 rounded border border-amber-800/40">
+                    <div class="text-xs font-mono text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 backdrop-blur-sm">
                         <span data-i18n="status_label">Status:</span> <span class="font-bold text-amber-400" data-i18n="status_open">Zero Current (Lamp OFF)</span>
                     </div>
                 </div>
 
                 <!-- 3. Short Circuit Card -->
-                <div onclick="selectCircuitType('short')" id="card-short" class="cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group">
+                <div onclick="selectCircuitType('short')" id="card-short" class="cursor-pointer workbench-panel p-5 border border-slate-700/80 bg-slate-900/30 hover:bg-slate-800/40 transition-all rounded-xl relative group">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-rose-400 text-lg flex items-center gap-2">
                             <span id="led-short" class="led-indicator led-off"></span> <span data-i18n="card_short_title">Short Circuit</span>
@@ -253,7 +298,7 @@
                     <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="card_short_desc">
                         A low-resistance bypass path directly connects power terminals. Uncontrolled excessive current creates dangerous heat & spark risks.
                     </p>
-                    <div class="text-xs font-mono text-rose-300 bg-rose-950/40 p-2 rounded border border-rose-800/40">
+                    <div class="text-xs font-mono text-rose-300 bg-rose-950/40 p-2 rounded-lg border border-rose-800/40 backdrop-blur-sm">
                         <span data-i18n="status_label">Status:</span> <span class="font-bold text-rose-400" data-i18n="status_short">Overcurrent Hazard!</span>
                     </div>
                 </div>
@@ -263,19 +308,19 @@
             <div class="screen-inset p-6 rounded-xl relative">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
-                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
-                        <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block shadow-[0_0_8px_#ef4444]"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block shadow-[0_0_8px_#f59e0b]"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500 inline-block shadow-[0_0_8px_#22c55e]"></span>
                         <span class="text-xs font-mono text-slate-400 ml-2 rtl:mr-2" data-i18n="schematic_title">Schematic Oscilloscope View</span>
                     </div>
-                    <div class="text-xs font-mono text-green-400" id="circuit-summary-tag" data-i18n="mode_closed">
+                    <div class="text-xs font-mono text-green-400 font-bold" id="circuit-summary-tag" data-i18n="mode_closed">
                         Active Mode: Closed Circuit Continuous Flow
                     </div>
                 </div>
 
                 <!-- SVG Circuit Interactive Schematic -->
                 <div class="w-full flex justify-center py-4 overflow-x-auto">
-                    <svg id="circuit-svg" viewBox="0 0 600 300" class="w-full max-w-xl h-64 bg-slate-950/70 rounded-lg border border-green-900/40 shadow-inner">
+                    <svg id="circuit-svg" viewBox="0 0 600 300" class="w-full max-w-xl h-64 bg-slate-950/80 rounded-lg border border-green-900/50 shadow-inner">
                         <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
                             <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#102a1d" stroke-width="0.5"/>
                         </pattern>
@@ -291,7 +336,7 @@
 
                         <!-- DC Voltage Source -->
                         <g transform="translate(120, 150)">
-                            <circle r="22" fill="#0b1912" stroke="#22c55e" stroke-width="2"/>
+                            <circle r="22" fill="#030806" stroke="#22c55e" stroke-width="2"/>
                             <line x1="-10" y1="-8" x2="10" y2="-8" stroke="#ef4444" stroke-width="3"/>
                             <line x1="0" y1="-13" x2="0" y2="-3" stroke="#ef4444" stroke-width="3"/>
                             <line x1="-6" y1="8" x2="6" y2="8" stroke="#38bdf8" stroke-width="3"/>
@@ -308,8 +353,8 @@
 
                         <!-- Load Right Side -->
                         <g transform="translate(480, 150)">
-                            <circle id="bulb-glow" r="30" fill="rgba(250, 204, 21, 0.2)" stroke="none" class="animate-pulse"/>
-                            <circle r="20" fill="#0b1912" stroke="#eab308" stroke-width="2"/>
+                            <circle id="bulb-glow" r="30" fill="rgba(250, 204, 21, 0.25)" stroke="none" class="animate-pulse"/>
+                            <circle r="20" fill="#030806" stroke="#eab308" stroke-width="2"/>
                             <path d="M -8 10 L -4 -5 L 0 5 L 4 -5 L 8 10" fill="none" stroke="#eab308" stroke-width="2" id="bulb-filament"/>
                             <text id="svg-text-load" x="28" y="4" fill="#eab308" font-family="monospace" font-size="12" data-i18n="svg_load">Load (R)</text>
                         </g>
@@ -335,7 +380,7 @@
                         <i data-lucide="activity" class="text-green-400"></i> <span data-i18n="sec2_title">Fundamental Quantities & AC / DC</span>
                     </h2>
                 </div>
-                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec2_badge">
+                <span class="px-3 py-1 bg-green-950/80 text-green-400 border border-green-700/50 text-xs rounded-full font-mono backdrop-blur-sm" data-i18n="sec2_badge">
                     Signals & Units
                 </span>
             </div>
@@ -346,10 +391,10 @@
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <!-- Voltage -->
-                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-sky-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-sky-400">
+                <div class="screen-inset p-4 rounded-xl border-l-4 border-l-sky-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-sky-400">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-mono font-bold text-sky-400" data-i18n="q_v_name">Voltage (V)</h4>
-                        <span class="text-xs font-mono bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800" data-i18n="q_v_unit">Volt [V]</span>
+                        <span class="text-xs font-mono bg-sky-950/80 text-sky-300 px-2 py-0.5 rounded border border-sky-800" data-i18n="q_v_unit">Volt [V]</span>
                     </div>
                     <p class="text-xs text-slate-300" data-i18n="q_v_desc">
                         Electric potential difference; the electromotive force driving charge through a conductor.
@@ -357,10 +402,10 @@
                 </div>
 
                 <!-- Current -->
-                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-emerald-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-emerald-400">
+                <div class="screen-inset p-4 rounded-xl border-l-4 border-l-emerald-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-emerald-400">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-mono font-bold text-emerald-400" data-i18n="q_i_name">Current (I)</h4>
-                        <span class="text-xs font-mono bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800" data-i18n="q_i_unit">Ampere [A]</span>
+                        <span class="text-xs font-mono bg-emerald-950/80 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800" data-i18n="q_i_unit">Ampere [A]</span>
                     </div>
                     <p class="text-xs text-slate-300" data-i18n="q_i_desc">
                         The rate of electric charge flow passing a given point per unit time ($I = Q / t$).
@@ -368,10 +413,10 @@
                 </div>
 
                 <!-- Resistance -->
-                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-amber-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-amber-400">
+                <div class="screen-inset p-4 rounded-xl border-l-4 border-l-amber-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-amber-400">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-mono font-bold text-amber-400" data-i18n="q_r_name">Resistance (R)</h4>
-                        <span class="text-xs font-mono bg-amber-950 text-amber-300 px-2 py-0.5 rounded border border-amber-800" data-i18n="q_r_unit">Ohm [Ω]</span>
+                        <span class="text-xs font-mono bg-amber-950/80 text-amber-300 px-2 py-0.5 rounded border border-amber-800" data-i18n="q_r_unit">Ohm [Ω]</span>
                     </div>
                     <p class="text-xs text-slate-300" data-i18n="q_r_desc">
                         The opposition to the flow of electric current, dissipating energy as heat.
@@ -379,10 +424,10 @@
                 </div>
 
                 <!-- Capacitance & Inductance -->
-                <div class="screen-inset p-4 rounded-lg border-l-4 border-l-purple-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-purple-400">
+                <div class="screen-inset p-4 rounded-xl border-l-4 border-l-purple-400 rtl:border-l-0 rtl:border-r-4 rtl:border-r-purple-400">
                     <div class="flex justify-between items-start mb-2">
                         <h4 class="font-mono font-bold text-purple-400" data-i18n="q_cl_name">Cap. (C) / Ind. (L)</h4>
-                        <span class="text-xs font-mono bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded border border-purple-800" data-i18n="q_cl_unit">Farad [F] / Henry [H]</span>
+                        <span class="text-xs font-mono bg-purple-950/80 text-purple-300 px-1.5 py-0.5 rounded border border-purple-800" data-i18n="q_cl_unit">Farad [F] / Henry [H]</span>
                     </div>
                     <p class="text-xs text-slate-300" data-i18n="q_cl_desc">
                         Ability to store electrical energy in electric fields (C) or magnetic fields (L).
@@ -401,17 +446,17 @@
                         </span>
                         <div class="flex space-x-2 rtl:space-x-reverse">
                             <button onclick="setWaveform('dc')" id="btn-dc-wave" class="px-3 py-1 text-xs font-mono bg-sky-600 text-white rounded shadow" data-i18n="btn_dc">Direct Current (DC)</button>
-                            <button onclick="setWaveform('ac')" id="btn-ac-wave" class="px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded" data-i18n="btn_ac">Alternating (AC)</button>
+                            <button onclick="setWaveform('ac')" id="btn-ac-wave" class="px-3 py-1 text-xs font-mono bg-slate-800/80 text-slate-400 hover:text-white rounded" data-i18n="btn_ac">Alternating (AC)</button>
                         </div>
                     </div>
                     
                     <!-- Oscilloscope Canvas -->
-                    <div class="w-full h-44 relative overflow-hidden rounded border border-green-900/50 bg-slate-950">
+                    <div class="w-full h-44 relative overflow-hidden rounded-lg border border-green-900/50 bg-slate-950/90 shadow-inner">
                         <canvas id="waveformCanvas" class="w-full h-full block"></canvas>
                     </div>
 
-                    <!-- Dynamic AC Frequency Interactive Controls Panel (Range: 0 to 240 Hz) -->
-                    <div id="ac-controls-panel" class="mt-4 p-3.5 bg-slate-950/80 border border-green-800/60 rounded-lg transition-all">
+                    <!-- Dynamic AC Frequency Controls Panel -->
+                    <div id="ac-controls-panel" class="mt-4 p-3.5 bg-slate-950/60 border border-green-800/60 rounded-lg transition-all">
                         <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
                             <label class="text-xs font-mono font-bold text-green-400 flex items-center gap-2">
                                 <i data-lucide="gauge" class="w-4 h-4 text-green-400"></i>
@@ -419,7 +464,6 @@
                                 <span id="val-freq" class="text-white text-sm font-bold">50</span> <span data-i18n="unit_hz" class="text-green-300">Hz</span>
                             </label>
 
-                            <!-- Computed Physics Parameters -->
                             <div class="flex space-x-3 rtl:space-x-reverse text-xs font-mono">
                                 <span class="bg-sky-950/80 px-2 py-0.5 rounded border border-sky-800/50">
                                     <span class="text-slate-400" data-i18n="lbl_period">Period T:</span> 
@@ -432,7 +476,6 @@
                             </div>
                         </div>
 
-                        <!-- Frequency Range Input Slider [0 to 240 Hz] -->
                         <input type="range" id="slider-freq" min="0" max="240" value="50" step="1" 
                                oninput="updateAcFrequency(this.value)" 
                                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
@@ -499,7 +542,7 @@
                         <i data-lucide="calculator" class="text-green-400"></i> <span data-i18n="sec3_title">Ohm's Law: V = I × R</span>
                     </h2>
                 </div>
-                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec3_badge">
+                <span class="px-3 py-1 bg-green-950/80 text-green-400 border border-green-700/50 text-xs rounded-full font-mono backdrop-blur-sm" data-i18n="sec3_badge">
                     Interactive Calculator
                 </span>
             </div>
@@ -513,11 +556,10 @@
                         
                         <!-- Interactive SVG Triangle -->
                         <svg viewBox="0 0 200 160" class="w-44 h-36 mx-auto my-2 drop-shadow-md">
-                            <polygon points="100,10 10,150 190,150" fill="#0b1912" stroke="#22c55e" stroke-width="3"/>
+                            <polygon points="100,10 10,150 190,150" fill="#030806" stroke="#22c55e" stroke-width="3"/>
                             <line x1="38" y1="90" x2="162" y2="90" stroke="#22c55e" stroke-width="3"/>
                             <line x1="100" y1="90" x2="100" y2="150" stroke="#22c55e" stroke-width="3"/>
                             
-                            <!-- Symbols -->
                             <text x="100" y="65" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="28" font-weight="bold">V</text>
                             <text x="60" y="130" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="26" font-weight="bold">I</text>
                             <text x="140" y="130" text-anchor="middle" fill="#f59e0b" font-family="monospace" font-size="26" font-weight="bold">R</text>
@@ -530,15 +572,15 @@
 
                     <!-- Parameter Breakdown -->
                     <div class="space-y-2 text-xs font-mono">
-                        <div class="p-3 bg-sky-950/30 border border-sky-800/40 rounded flex justify-between items-center">
+                        <div class="p-3 bg-sky-950/30 border border-sky-800/40 rounded-lg flex justify-between items-center backdrop-blur-sm">
                             <span class="text-sky-300 font-bold" data-i18n="p_v_lbl">V = Voltage</span>
                             <span class="text-slate-400" data-i18n="p_v_desc">Pushes current through circuit (Volts)</span>
                         </div>
-                        <div class="p-3 bg-emerald-950/30 border border-emerald-800/40 rounded flex justify-between items-center">
+                        <div class="p-3 bg-emerald-950/30 border border-emerald-800/40 rounded-lg flex justify-between items-center backdrop-blur-sm">
                             <span class="text-emerald-300 font-bold" data-i18n="p_i_lbl">I = Current</span>
                             <span class="text-slate-400" data-i18n="p_i_desc">Flow rate of electric charge (Amps)</span>
                         </div>
-                        <div class="p-3 bg-amber-950/30 border border-amber-800/40 rounded flex justify-between items-center">
+                        <div class="p-3 bg-amber-950/30 border border-amber-800/40 rounded-lg flex justify-between items-center backdrop-blur-sm">
                             <span class="text-amber-300 font-bold" data-i18n="p_r_lbl">R = Resistance</span>
                             <span class="text-slate-400" data-i18n="p_r_desc">Opposes charge flow (Ohms Ω)</span>
                         </div>
@@ -575,7 +617,7 @@
                     </div>
 
                     <!-- Calculated Result Badge & Physical Light Bulb Response -->
-                    <div class="bg-black/60 p-4 rounded-lg border border-green-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="bg-black/50 p-4 rounded-lg border border-green-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-sm">
                         <div>
                             <span class="text-xs font-mono text-slate-400 uppercase" data-i18n="calc_cur_lbl">Calculated Current (I = V / R)</span>
                             <div class="text-3xl font-mono font-bold text-green-400 glow-green" id="result-i">
@@ -584,19 +626,16 @@
                         </div>
 
                         <!-- Dynamic SVG Interactive Light Bulb -->
-                        <div class="flex items-center space-x-3 rtl:space-x-reverse bg-slate-950 p-3 rounded-md border border-slate-800">
+                        <div class="flex items-center space-x-3 rtl:space-x-reverse bg-slate-950/80 p-3 rounded-md border border-slate-800">
                             <div class="text-center">
                                 <div class="relative w-14 h-16 mx-auto flex items-center justify-center">
                                     <svg id="ohm-led" class="w-14 h-16 transition-all duration-200 overflow-visible" viewBox="0 0 60 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <!-- Bulb Outer Glass Contour & Glow Fill -->
                                         <path id="bulb-body" d="M 30,5 C 16,5 8,15 8,27 C 8,35 12,41 18,48 L 18,58 C 18,60 20,62 22,62 L 38,62 C 40,62 42,60 42,58 L 42,48 C 48,41 52,35 52,27 C 52,15 44,5 30,5 Z" 
                                               fill="rgba(234, 179, 8, 0.6)" stroke="#f59e0b" stroke-width="2.5" class="transition-all duration-200"/>
                                         
-                                        <!-- Internal Tungsten Filament Wire (Zig-zag Coil) -->
                                         <path id="bulb-filament-ohm" d="M 22,42 L 22,26 L 25,20 L 28,27 L 31,20 L 34,27 L 37,20 L 38,26 L 38,42" 
                                               fill="none" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" class="transition-all duration-200"/>
                                         
-                                        <!-- Screw Base & Metallic Contacts -->
                                         <line x1="20" y1="62" x2="40" y2="62" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
                                         <line x1="22" y1="66" x2="38" y2="66" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
                                         <line x1="25" y1="70" x2="35" y2="70" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
@@ -621,7 +660,7 @@
                         <i data-lucide="component" class="text-green-400"></i> <span data-i18n="sec4_title">Electronic Components & Circuit Symbols</span>
                     </h2>
                 </div>
-                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec4_badge">
+                <span class="px-3 py-1 bg-green-950/80 text-green-400 border border-green-700/50 text-xs rounded-full font-mono backdrop-blur-sm" data-i18n="sec4_badge">
                     6 Key Components
                 </span>
             </div>
@@ -632,9 +671,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c1_title">Power Sources</h3>
-                        <span class="px-2 py-0.5 bg-green-950 text-green-300 font-mono text-xs rounded border border-green-800" data-i18n="c1_desig">Letter: V</span>
+                        <span class="px-2 py-0.5 bg-green-950/80 text-green-300 font-mono text-xs rounded border border-green-800" data-i18n="c1_desig">Letter: V</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-around border border-slate-900 mb-3 p-2">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-around border border-slate-900 mb-3 p-2">
                         <div class="text-center">
                             <svg class="w-14 h-14 mx-auto" viewBox="0 0 60 60">
                                 <line x1="10" y1="30" x2="25" y2="30" stroke="#22c55e" stroke-width="2"/>
@@ -663,9 +702,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c2_title">Resistor</h3>
-                        <span class="px-2 py-0.5 bg-amber-950 text-amber-300 font-mono text-xs rounded border border-amber-800" data-i18n="c2_desig">Letter: R</span>
+                        <span class="px-2 py-0.5 bg-amber-950/80 text-amber-300 font-mono text-xs rounded border border-amber-800" data-i18n="c2_desig">Letter: R</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-center border border-slate-900 mb-3">
                         <svg class="w-36 h-12" viewBox="0 0 120 40">
                             <path d="M 10 20 L 30 20 L 35 10 L 45 30 L 55 10 L 65 30 L 75 10 L 85 30 L 90 20 L 110 20" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
                         </svg>
@@ -679,9 +718,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c3_title">Capacitor</h3>
-                        <span class="px-2 py-0.5 bg-sky-950 text-sky-300 font-mono text-xs rounded border border-sky-800" data-i18n="c3_desig">Letter: C</span>
+                        <span class="px-2 py-0.5 bg-sky-950/80 text-sky-300 font-mono text-xs rounded border border-sky-800" data-i18n="c3_desig">Letter: C</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-center border border-slate-900 mb-3">
                         <svg class="w-36 h-12" viewBox="0 0 120 40">
                             <line x1="10" y1="20" x2="52" y2="20" stroke="#38bdf8" stroke-width="2.5"/>
                             <line x1="68" y1="20" x2="110" y2="20" stroke="#38bdf8" stroke-width="2.5"/>
@@ -698,9 +737,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c4_title">Inductor (Coil)</h3>
-                        <span class="px-2 py-0.5 bg-purple-950 text-purple-300 font-mono text-xs rounded border border-purple-800" data-i18n="c4_desig">Letter: L</span>
+                        <span class="px-2 py-0.5 bg-purple-950/80 text-purple-300 font-mono text-xs rounded border border-purple-800" data-i18n="c4_desig">Letter: L</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-center border border-slate-900 mb-3">
                         <svg class="w-36 h-12" viewBox="0 0 120 40">
                             <path d="M 10 20 L 30 20 C 30 10 42 10 42 20 C 42 10 54 10 54 20 C 54 10 66 10 66 20 C 66 10 78 10 78 20 L 110 20" fill="none" stroke="#a855f7" stroke-width="2.5"/>
                         </svg>
@@ -714,9 +753,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c5_title">Diode</h3>
-                        <span class="px-2 py-0.5 bg-rose-950 text-rose-300 font-mono text-xs rounded border border-rose-800" data-i18n="c5_desig">Letter: D</span>
+                        <span class="px-2 py-0.5 bg-rose-950/80 text-rose-300 font-mono text-xs rounded border border-rose-800" data-i18n="c5_desig">Letter: D</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-center border border-slate-900 mb-3">
                         <svg class="w-36 h-12" viewBox="0 0 120 40">
                             <line x1="10" y1="20" x2="45" y2="20" stroke="#f43f5e" stroke-width="2.5"/>
                             <line x1="75" y1="20" x2="110" y2="20" stroke="#f43f5e" stroke-width="2.5"/>
@@ -733,9 +772,9 @@
                 <div class="screen-inset p-5 rounded-xl border border-slate-800 hover:border-green-600/50 transition">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="font-mono font-bold text-white text-base" data-i18n="c6_title">Transistor (NPN)</h3>
-                        <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 font-mono text-xs rounded border border-emerald-800" data-i18n="c6_desig">Letter: Q</span>
+                        <span class="px-2 py-0.5 bg-emerald-950/80 text-emerald-300 font-mono text-xs rounded border border-emerald-800" data-i18n="c6_desig">Letter: Q</span>
                     </div>
-                    <div class="h-28 bg-slate-950 rounded flex items-center justify-center border border-slate-900 mb-3">
+                    <div class="h-28 bg-slate-950/80 rounded-lg flex items-center justify-center border border-slate-900 mb-3">
                         <svg class="w-36 h-12" viewBox="0 0 120 40">
                             <circle cx="60" cy="20" r="16" fill="none" stroke="#10b981" stroke-width="2"/>
                             <line x1="45" y1="12" x2="45" y2="28" stroke="#10b981" stroke-width="3"/>
@@ -761,19 +800,17 @@
                         <i data-lucide="gauge" class="text-green-400"></i> <span data-i18n="sec5_title">Electrical Measuring Instruments</span>
                     </h2>
                 </div>
-                <span class="px-3 py-1 bg-green-950 text-green-400 border border-green-700/50 text-xs rounded font-mono" data-i18n="sec5_badge">
+                <span class="px-3 py-1 bg-green-950/80 text-green-400 border border-green-700/50 text-xs rounded-full font-mono backdrop-blur-sm" data-i18n="sec5_badge">
                     Diagnostic Gear
                 </span>
             </div>
 
-            <!-- Instruments List (تم تعديله لإضافة الصور الحقيقية) -->
+            <!-- Instruments List -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Voltmeter -->
-                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
-                    <!-- حاوية الصورة للفولتميتر -->
-                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-sky-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);">
-                        <!-- استبدل الرابط هنا بمسار صورة الفولتميتر -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white/95 rounded-xl border-2 border-sky-400 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(56,189,248,0.25)]">
                         <img src="voltmeter.jpg" alt="Voltmeter" class="max-w-full max-h-full object-contain">
                     </div>
                     <div>
@@ -788,10 +825,8 @@
                 </div>
 
                 <!-- Ammeter -->
-                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
-                    <!-- حاوية الصورة للأميتر -->
-                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-emerald-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(52, 211, 153, 0.3);">
-                        <!-- استبدل الرابط هنا بمسار صورة الأميتر -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white/95 rounded-xl border-2 border-emerald-400 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(52,211,153,0.25)]">
                         <img src="ampermeter.jpg" alt="Ammeter" class="max-w-full max-h-full object-contain">
                     </div>
                     <div>
@@ -806,10 +841,8 @@
                 </div>
 
                 <!-- Digital Multimeter -->
-                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
-                    <!-- حاوية الصورة للملتيميتر -->
-                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-amber-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);">
-                        <!-- استبدل الرابط هنا بمسار صورة الملتيميتر -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white/95 rounded-xl border-2 border-amber-400 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(251,191,36,0.25)]">
                         <img src="digital-multimeter.jpg" alt="Multimeter" class="max-w-full max-h-full object-contain">
                     </div>
                     <div>
@@ -824,10 +857,8 @@
                 </div>
 
                 <!-- Oscilloscope -->
-                <div class="workbench-panel p-5 rounded-xl border border-slate-700 flex flex-col sm:flex-row gap-4 items-start">
-                    <!-- حاوية الصورة لراسم الإشارة -->
-                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white rounded-lg border-2 border-purple-400 flex items-center justify-center p-2" style="box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);">
-                        <!-- استبدل الرابط هنا بمسار صورة الاوسيلوسكوب -->
+                <div class="workbench-panel p-5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="w-full sm:w-40 h-40 shrink-0 bg-white/95 rounded-xl border-2 border-purple-400 flex items-center justify-center p-2 shadow-[0_0_15px_rgba(192,132,252,0.25)]">
                         <img src="digital-oscilloscope.jpg" alt="Oscilloscope" class="max-w-full max-h-full object-contain">
                     </div>
                     <div>
@@ -847,9 +878,9 @@
     </main>
 
     <!-- Bottom Deck Navigation Bar Controls -->
-    <footer class="bg-pcbDark/95 border-t border-green-900/40 px-4 py-3 sticky bottom-0 z-50 backdrop-blur-md">
+    <footer class="bg-pcbDark/80 border-t border-green-900/50 px-4 py-3 sticky bottom-0 z-50 backdrop-blur-xl shadow-lg">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <button onclick="prevSlide()" id="prev-btn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs rounded-lg border border-slate-600 flex items-center gap-2 transition">
+            <button onclick="prevSlide()" id="prev-btn" class="px-4 py-2 bg-slate-900/80 hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed font-mono text-xs rounded-xl border border-slate-700 flex items-center gap-2 transition backdrop-blur-sm">
                 <i data-lucide="arrow-left" class="w-4 h-4 text-green-400 rtl:rotate-180"></i> <span data-i18n="btn_prev">Previous</span>
             </button>
 
@@ -857,7 +888,7 @@
                 <span data-i18n="lbl_slide">Slide</span> <span id="current-slide-num" class="text-green-400 font-bold">1</span> <span data-i18n="lbl_of">of</span> <span class="text-slate-200">5</span>
             </div>
 
-            <button onclick="nextSlide()" id="next-btn" class="px-4 py-2 bg-green-700 hover:bg-green-600 font-mono text-xs text-white rounded-lg border border-green-500 flex items-center gap-2 transition shadow-lg">
+            <button onclick="nextSlide()" id="next-btn" class="px-4 py-2 bg-green-700/90 hover:bg-green-600 font-mono text-xs text-white rounded-xl border border-green-500 flex items-center gap-2 transition shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                 <span id="next-btn-text" data-i18n="btn_next">Next</span> <i id="next-btn-icon" data-i18n-icon="arrow" data-lucide="arrow-right" class="w-4 h-4 rtl:rotate-180"></i>
             </button>
         </div>
@@ -1323,9 +1354,9 @@
             for (let i = 0; i < totalSlides; i++) {
                 const navBtn = document.getElementById(`nav-btn-${i}`);
                 if (i === currentSlide) {
-                    navBtn.className = "px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1 bg-green-600 text-white font-bold shadow-md";
+                    navBtn.className = "px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5 bg-green-600 text-white font-bold shadow-[0_0_12px_rgba(34,197,94,0.4)]";
                 } else {
-                    navBtn.className = "px-3 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1 bg-transparent text-slate-400 hover:text-white";
+                    navBtn.className = "px-3.5 py-1 text-xs font-mono rounded-full transition-all duration-200 flex items-center gap-1.5 bg-transparent text-slate-400 hover:text-white";
                 }
             }
         }
@@ -1365,7 +1396,7 @@
             ['closed', 'open', 'short'].forEach(t => {
                 const card = document.getElementById(`card-${t}`);
                 const led = document.getElementById(`led-${t}`);
-                card.className = "cursor-pointer workbench-panel p-5 border border-slate-700 bg-slate-900/40 hover:bg-slate-800/50 transition-all rounded-xl relative group";
+                card.className = "cursor-pointer workbench-panel p-5 border border-slate-700/80 bg-slate-900/30 hover:bg-slate-800/40 transition-all rounded-xl relative group";
                 led.className = "led-indicator led-off";
             });
 
@@ -1382,7 +1413,7 @@
             const dict = translations[currentLang];
 
             if (type === 'closed') {
-                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/20 transition-all rounded-xl relative group";
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-green-500/80 bg-green-950/30 transition-all rounded-xl relative group shadow-[0_0_20px_rgba(34,197,94,0.15)]";
                 activeLed.className = "led-indicator led-green";
                 
                 switchArm.setAttribute('x2', '28');
@@ -1394,9 +1425,9 @@
                 shortWire.setAttribute('opacity', '0');
                 sparkGroup.setAttribute('opacity', '0');
                 summaryTag.textContent = dict.mode_closed;
-                summaryTag.className = "text-xs font-mono text-green-400";
+                summaryTag.className = "text-xs font-mono text-green-400 font-bold";
             } else if (type === 'open') {
-                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-amber-500/80 bg-amber-950/20 transition-all rounded-xl relative group";
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-amber-500/80 bg-amber-950/30 transition-all rounded-xl relative group shadow-[0_0_20px_rgba(245,158,11,0.15)]";
                 activeLed.className = "led-indicator led-orange";
 
                 switchArm.setAttribute('x2', '15');
@@ -1407,9 +1438,9 @@
                 shortWire.setAttribute('opacity', '0');
                 sparkGroup.setAttribute('opacity', '0');
                 summaryTag.textContent = dict.mode_open;
-                summaryTag.className = "text-xs font-mono text-amber-400";
+                summaryTag.className = "text-xs font-mono text-amber-400 font-bold";
             } else if (type === 'short') {
-                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-rose-500/80 bg-rose-950/20 transition-all rounded-xl relative group";
+                activeCard.className = "cursor-pointer workbench-panel p-5 border-2 border-rose-500/80 bg-rose-950/30 transition-all rounded-xl relative group shadow-[0_0_20px_rgba(239,68,68,0.2)]";
                 activeLed.className = "led-indicator led-red";
 
                 switchArm.setAttribute('x2', '28');
@@ -1463,7 +1494,7 @@
             waveCtx.scale(dpr, dpr);
         }
 
-         function initWaveformCanvas() {
+        function initWaveformCanvas() {
             waveCanvas = document.getElementById('waveformCanvas');
             if (!waveCanvas) return;
             waveCtx = waveCanvas.getContext('2d');
@@ -1477,7 +1508,7 @@
                     return;
                 }
 
-                waveCtx.fillStyle = '#06120c';
+                waveCtx.fillStyle = '#030806';
                 waveCtx.fillRect(0, 0, canvasWidth, canvasHeight);
 
                 waveCtx.strokeStyle = 'rgba(16, 42, 29, 0.8)';
@@ -1512,7 +1543,6 @@
                     waveCtx.shadowColor = '#38bdf8';
                     waveCtx.shadowBlur = 10;
                     
-                    // تم إزالة الناقص 35 ليكون في المنتصف تماماً
                     const dcY = canvasHeight / 2;
                     
                     waveCtx.moveTo(0, dcY);
@@ -1569,12 +1599,12 @@
 
             if (type === 'dc') {
                 btnDc.className = "px-3 py-1 text-xs font-mono bg-sky-600 text-white rounded shadow font-bold";
-                btnAc.className = "px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded";
+                btnAc.className = "px-3 py-1 text-xs font-mono bg-slate-800/80 text-slate-400 hover:text-white rounded";
                 desc.textContent = dict.wave_dc_desc;
                 acPanel.classList.add('opacity-40', 'pointer-events-none');
             } else {
                 btnAc.className = "px-3 py-1 text-xs font-mono bg-green-600 text-white rounded shadow font-bold";
-                btnDc.className = "px-3 py-1 text-xs font-mono bg-slate-800 text-slate-400 hover:text-white rounded";
+                btnDc.className = "px-3 py-1 text-xs font-mono bg-slate-800/80 text-slate-400 hover:text-white rounded";
                 desc.textContent = dict.wave_ac_desc;
                 acPanel.classList.remove('opacity-40', 'pointer-events-none');
             }
@@ -1594,7 +1624,6 @@
             document.getElementById('result-i').textContent = `${i.toFixed(2)} A`;
             document.getElementById('power-calc').textContent = `Power P = ${power.toFixed(2)} W`;
 
-            // Elements for SVG Light Bulb
             const bulbSvg = document.getElementById('ohm-led');
             const bulbBody = document.getElementById('bulb-body');
             const bulbFilament = document.getElementById('bulb-filament-ohm');
@@ -1602,14 +1631,10 @@
             const intensity = Math.min(i / 2, 1);
             const glowRadius = Math.max(4, intensity * 35);
 
-            // Dynamic Drop Shadow Glow (SVG Glow Filter)
             bulbSvg.style.filter = `drop-shadow(0 0 ${glowRadius}px rgba(234, 179, 8, ${intensity}))`;
-            
-            // Dynamic Glass Color & Opacity Response
             bulbBody.style.fill = `rgba(234, 179, 8, ${0.1 + intensity * 0.85})`;
             bulbBody.style.stroke = intensity > 0.1 ? '#f59e0b' : '#475569';
             
-            // Filament Wire Dynamic Heating & Brightness Response
             if (intensity > 0.05) {
                 bulbFilament.style.stroke = '#ffffff';
                 bulbFilament.style.filter = `drop-shadow(0 0 4px #ffffff)`;
