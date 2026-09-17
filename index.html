@@ -1463,7 +1463,7 @@
             waveCtx.scale(dpr, dpr);
         }
 
-        function initWaveformCanvas() {
+         function initWaveformCanvas() {
             waveCanvas = document.getElementById('waveformCanvas');
             if (!waveCanvas) return;
             waveCtx = waveCanvas.getContext('2d');
@@ -1512,7 +1512,9 @@
                     waveCtx.shadowColor = '#38bdf8';
                     waveCtx.shadowBlur = 10;
                     
-                    const dcY = canvasHeight / 2 - 35;
+                    // تم إزالة الناقص 35 ليكون في المنتصف تماماً
+                    const dcY = canvasHeight / 2;
+                    
                     waveCtx.moveTo(0, dcY);
                     waveCtx.lineTo(canvasWidth, dcY);
                     waveCtx.stroke();
